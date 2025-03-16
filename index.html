@@ -74,15 +74,23 @@
     </div>
     <div class="result" id="result"></div>
 
+    <!-- Аудио -->
+    <audio id="spinSound" src="spin.mp3"></audio>
+    <audio id="winSound" src="win.mp3"></audio>
+
     <script>
         const wheel = document.getElementById("wheel");
         const result = document.getElementById("result");
+        const spinSound = document.getElementById("spinSound");
+        const winSound = document.getElementById("winSound");
 
         wheel.addEventListener("click", () => {
-            const randomSpin = Math.floor(Math.random() * 3600) + 360; // Случайное вращение
+            spinSound.play(); // Звук вращения
+            const randomSpin = Math.floor(Math.random() * 3600) + 360;
             wheel.style.transform = `rotate(${randomSpin}deg)`;
 
             setTimeout(() => {
+                winSound.play(); // Звук победы
                 const degrees = randomSpin % 360;
                 let prize;
                 if (degrees < 72) prize = "Красный приз!";
@@ -91,7 +99,7 @@
                 else if (degrees < 288) prize = "Зелёный приз!";
                 else prize = "Синий приз!";
                 result.innerText = prize;
-            }, 3000); // Результат через 3 секунды
+            }, 3000);
         });
 
         Telegram.WebApp.ready();
