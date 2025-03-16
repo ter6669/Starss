@@ -25,15 +25,25 @@
             margin-bottom: 20px;
         }
         .wheel {
-            width: 400px; /* Увеличенный размер */
-            height: 400px; /* Увеличенный размер */
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
             background: conic-gradient(
-                red 0% 20%,
-                orange 20% 40%,
-                yellow 40% 60%,
-                green 60% 80%,
-                blue 80% 100%
+                #FFD700 0% 6.67%, /* Золотой сектор */
+                red 6.67% 13.33%,
+                orange 13.33% 20%,
+                yellow 20% 26.67%,
+                green 26.67% 33.33%,
+                blue 33.33% 40%,
+                purple 40% 46.67%,
+                pink 46.67% 53.33%,
+                cyan 53.33% 60%,
+                lime 60% 66.67%,
+                teal 66.67% 73.33%,
+                navy 73.33% 80%,
+                maroon 80% 86.67%,
+                olive 86.67% 93.33%,
+                gray 93.33% 100%
             );
             position: relative;
             cursor: pointer;
@@ -53,28 +63,41 @@
         .arrow {
             width: 0;
             height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 20px solid black;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid black;
             position: absolute;
-            top: -10px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
+            z-index: 1;
         }
         .result {
             margin-top: 20px;
             font-size: 20px;
             font-weight: bold;
         }
+        #spinAgain {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none; /* Скрыта по умолчанию */
+        }
     </style>
 </head>
 <body>
     <h1>Добро пожаловать в Starts Fortune!</h1>
     <div class="wheel-container">
-        <div class="wheel" id="wheel"></div>
         <div class="arrow"></div>
+        <div class="wheel" id="wheel"></div>
     </div>
     <div class="result" id="result"></div>
+    <button id="spinAgain">Крутить ещё</button>
 
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
@@ -83,8 +106,74 @@
     <script>
         const wheel = document.getElementById("wheel");
         const result = document.getElementById("result");
+        const spinAgainButton = document.getElementById("spinAgain");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
-        // Отладка
-        spinSound
+        // Отладка для аудио
+        spinSound.addEventListener("canplaythrough", () => {
+            console.log("spinSound готов к воспроизведению");
+        });
+        winSound.addEventListener("canplaythrough", () => {
+            console.log("winSound готов к воспроизведению");
+        });
+
+        spinSound.addEventListener("error", (e) => {
+            console.error("Ошибка загрузки spinSound:", e);
+        });
+        winSound.addEventListener("error", (e) => {
+            console.error("Ошибка загрузки winSound:", e);
+        });
+
+        // Отладка для фонового фото
+        const img = new Image();
+        img.src = 'background.jpg';
+        img.onload = () => {
+            console.log("Фоновое фото загружено");
+        };
+        img.onerror = (e) => {
+            console.error("Ошибка загрузки фонового фото:", e);
+        };
+
+        // Функция для вращения колеса
+        function spinWheel() {
+            spinAgainButton.style.display = "none"; // Скрыть кнопку "Крутить ещё"
+            spinSound.play(); // Звук вращения
+            const randomSpin = Math.floor(Math.random() * 3600) + 360;
+            wheel.style.transform = `rotate(${randomSpin}deg)`;
+
+            setTimeout(() => {
+                winSound.play(); // Звук победы
+                const degrees = randomSpin % 360;
+                let prize;
+                if (degrees < 24) prize = "Золотой приз! 🎉"; // Золотой сектор
+                else if (degrees < 48) prize = "Красный приз!";
+                else if (degrees < 72) prize = "Оранжевый приз!";
+                else if (degrees < 96) prize = "Жёлтый приз!";
+                else if (degrees < 120) prize = "Зелёный приз!";
+                else if (degrees < 144) prize = "Синий приз!";
+                else if (degrees < 168) prize = "Фиолетовый приз!";
+                else if (degrees < 192) prize = "Розовый приз!";
+                else if (degrees < 216) prize = "Голубой приз!";
+                else if (degrees < 240) prize = "Лаймовый приз!";
+                else if (degrees < 264) prize = "Бирюзовый приз!";
+                else if (degrees < 288) prize = "Тёмно-синий приз!";
+                else if (degrees < 312) prize = "Бордовый приз!";
+                else if (degrees < 336) prize = "Оливковый приз!";
+                else prize = "Серый приз!";
+                result.innerText = prize;
+                spinAgainButton.style.display = "block"; // Показать кнопку "Крутить ещё"
+            }, 3000);
+        }
+
+        // Обработчик клика на колесо
+        wheel.addEventListener("click", spinWheel);
+
+        // Обработчик клика на кнопку "Крутить ещё"
+        spinAgainButton.addEventListener("click", spinWheel);
+
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+    </script>
+</body>
+</html>
