@@ -24,9 +24,14 @@
             color: #333;
             margin-bottom: 20px;
         }
-        .wheel {
+        .wheel-container {
+            position: relative;
             width: 400px;
             height: 400px;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             background: conic-gradient(
                 #FFD700 0% 6.67%, /* Золотой сектор */
@@ -60,15 +65,6 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
-        .wheel::before {
-            content: "⭐️";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            font-size: 40px;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-        }
         .arrow {
             width: 0;
             height: 0;
@@ -80,6 +76,14 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
+        }
+        .star {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 20px;
+            transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg));
+            transform-origin: 0 200px; /* Центр колеса */
         }
         .result {
             margin-top: 20px;
@@ -103,7 +107,24 @@
     <h1>Добро пожаловать в Starts Fortune!</h1>
     <div class="wheel-container">
         <div class="arrow"></div>
-        <div class="wheel" id="wheel"></div>
+        <div class="wheel" id="wheel">
+            <!-- Звезды на каждом секторе -->
+            <div class="star" style="--angle: 10;">⭐️</div>
+            <div class="star" style="--angle: 34;">⭐️</div>
+            <div class="star" style="--angle: 58;">⭐️</div>
+            <div class="star" style="--angle: 82;">⭐️</div>
+            <div class="star" style="--angle: 106;">⭐️</div>
+            <div class="star" style="--angle: 130;">⭐️</div>
+            <div class="star" style="--angle: 154;">⭐️</div>
+            <div class="star" style="--angle: 178;">⭐️</div>
+            <div class="star" style="--angle: 202;">⭐️</div>
+            <div class="star" style="--angle: 226;">⭐️</div>
+            <div class="star" style="--angle: 250;">⭐️</div>
+            <div class="star" style="--angle: 274;">⭐️</div>
+            <div class="star" style="--angle: 298;">⭐️</div>
+            <div class="star" style="--angle: 322;">⭐️</div>
+            <div class="star" style="--angle: 346;">⭐️</div>
+        </div>
     </div>
     <div class="result" id="result"></div>
     <button id="spinAgain">Крутить ещё</button>
@@ -166,10 +187,6 @@
                 winSound.play(); // Звук победы
                 result.innerText = prize.name; // Показываем результат
                 spinAgainButton.style.display = "block"; // Показать кнопку "Крутить ещё"
-
-                // Показываем стрелку, указывающую на выигрышный цвет
-                const arrow = document.querySelector(".arrow");
-                arrow.style.display = "block";
             }, 3000);
         }
 
