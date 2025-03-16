@@ -84,26 +84,21 @@
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
-        wheel.addEventListener("click", () => {
-            spinSound.play(); // Звук вращения
-            const randomSpin = Math.floor(Math.random() * 3600) + 360;
-            wheel.style.transform = `rotate(${randomSpin}deg)`;
-
-            setTimeout(() => {
-                winSound.play(); // Звук победы
-                const degrees = randomSpin % 360;
-                let prize;
-                if (degrees < 72) prize = "Красный приз!";
-                else if (degrees < 144) prize = "Оранжевый приз!";
-                else if (degrees < 216) prize = "Жёлтый приз!";
-                else if (degrees < 288) prize = "Зелёный приз!";
-                else prize = "Синий приз!";
-                result.innerText = prize;
-            }, 3000);
+        // Отладка
+        spinSound.addEventListener("canplaythrough", () => {
+            console.log("spinSound готов к воспроизведению");
+        });
+        winSound.addEventListener("canplaythrough", () => {
+            console.log("winSound готов к воспроизведению");
         });
 
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand();
-    </script>
-</body>
-</html>
+        spinSound.addEventListener("error", (e) => {
+            console.error("Ошибка загрузки spinSound:", e);
+        });
+        winSound.addEventListener("error", (e) => {
+            console.error("Ошибка загрузки winSound:", e);
+        });
+
+        wheel.addEventListener("click", () => {
+            spinSound.play(); // Звук вращения
+            const randomSpin = Math.floor(Math.random() *
