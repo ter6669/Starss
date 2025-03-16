@@ -68,12 +68,19 @@
             height: 0;
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
-            border-top: 40px solid black; /* Стрелка направлена вниз */
+            border-bottom: 40px solid black; /* Стрелка направлена вниз */
             position: absolute;
-            bottom: -20px; /* Расположение стрелки внизу */
+            top: -20px; /* Расположение стрелки вверху */
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
+            animation: shake 0.5s ease-in-out infinite; /* Анимация стрелки */
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(-5deg); }
+            50% { transform: translateX(-50%) rotate(5deg); }
+            75% { transform: translateX(-50%) rotate(-5deg); }
         }
         .result {
             margin-top: 20px;
@@ -107,6 +114,31 @@
             font-size: 16px;
             color: #333;
         }
+        .history {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .history ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .history li {
+            margin: 5px 0;
+        }
+        .reset-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .reset-button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -118,18 +150,27 @@
     <div class="result" id="result"></div>
     <button id="spinAgain">Крутить ещё</button>
     <div class="timer" id="timer"></div>
+    <div class="history">
+        <h2>История выигрышей</h2>
+        <ul id="historyList"></ul>
+    </div>
+    <button class="reset-button" id="resetButton">Сбросить очки</button>
 
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
+    <audio id="hoverSound" src="hover.mp3"></audio>
 
     <script>
         const wheel = document.getElementById("wheel");
         const result = document.getElementById("result");
         const spinAgainButton = document.getElementById("spinAgain");
         const timerDisplay = document.getElementById("timer");
+        const historyList = document.getElementById("historyList");
+        const resetButton = document.getElementById("resetButton");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
+        const hoverSound = document.getElementById("hoverSound");
 
         const prizes = [
             { color: "#FFD700", name: "Золотой приз! 🎉", probability: 1 }, // 1% вероятность
@@ -151,6 +192,8 @@
 
         let isSpinning = false;
         let countdown = 0;
+        let score = 0;
+        let history = [];
 
         function getRandomPrize() {
             const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0);
@@ -178,6 +221,13 @@
             }, 1000);
         }
 
+        function updateHistory(prize) {
+            history.push(prize.name);
+            const li = document.createElement("li");
+            li.innerText = prize.name;
+            historyList.appendChild(li);
+        }
+
         function spinWheel() {
             if (isSpinning) return;
             isSpinning = true;
@@ -185,7 +235,7 @@
             spinSound.play();
 
             const prize = getRandomPrize(); // Выбираем приз
-            const targetDegree = (prizes.indexOf(prize) * 24) + Math.floor(Math.random() * 24); // Вычисляем угол
+            const targetDegree = (360 - (prizes.indexOf(prize) * 24)) % 360; // Вычисляем угол
             const randomSpin = 3600 + targetDegree; // Добавляем полные обороты
 
             // Сбрасываем transform перед каждым вращением
@@ -202,8 +252,16 @@
                 spinAgainButton.style.display = "block";
                 spinAgainButton.disabled = true;
                 isSpinning = false;
+                updateHistory(prize); // Обновляем историю
                 startCountdown(); // Запускаем таймер
             }, 3000);
+        }
+
+        function resetScore() {
+            score = 0;
+            history = [];
+            historyList.innerHTML = "";
+            result.innerText = "";
         }
 
         // Обработчик клика на колесо
@@ -211,6 +269,14 @@
 
         // Обработчик клика на кнопку "Крутить ещё"
         spinAgainButton.addEventListener("click", spinWheel);
+
+        // Обработчик клика на кнопку "Сбросить очки"
+        resetButton.addEventListener("click", resetScore);
+
+        // Звук при наведении на кнопку
+        spinAgainButton.addEventListener("mouseenter", () => {
+            hoverSound.play();
+        });
     </script>
 </body>
 </html>
