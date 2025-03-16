@@ -190,4 +190,132 @@
             <div class="star" style="--angle: 226;">⭐️</div>
             <div class="star" style="--angle: 250;">⭐️</div>
             <div class="star" style="--angle: 274;">⭐️</div>
-            <div class="star" style
+            <div class="star" style="--angle: 298;">⭐️</div>
+            <div class="star" style="--angle: 322;">⭐️</div>
+            <div class="star" style="--angle: 346;">⭐️</div>
+        </div>
+    </div>
+    <div class="progress-bar">
+        <div class="progress"></div>
+    </div>
+    <div class="result" id="result"></div>
+    <div id="score">Очки: 0</div>
+    <button id="spinAgain">Крутить ещё</button>
+    <div id="history">
+        <h2>История выигрышей</h2>
+        <ul id="historyList"></ul>
+    </div>
+    <canvas id="confetti"></canvas>
+
+    <audio id="spinSound" src="spin.mp3"></audio>
+    <audio id="winSound" src="win.mp3"></audio>
+
+    <script>
+        const wheel = document.getElementById("wheel");
+        const result = document.getElementById("result");
+        const spinAgainButton = document.getElementById("spinAgain");
+        const spinSound = document.getElementById("spinSound");
+        const winSound = document.getElementById("winSound");
+        const scoreDisplay = document.getElementById("score");
+        const historyList = document.getElementById("historyList");
+
+        let score = 0;
+
+        const prizes = [
+            { color: "#FFD700", name: "Золотой приз! 🎉", probability: 1 },
+            { color: "red", name: "Красный приз!", probability: 7 },
+            { color: "orange", name: "Оранжевый приз!", probability: 7 },
+            { color: "yellow", name: "Жёлтый приз!", probability: 7 },
+            { color: "green", name: "Зелёный приз!", probability: 7 },
+            { color: "blue", name: "Синий приз!", probability: 7 },
+            { color: "purple", name: "Фиолетовый приз!", probability: 7 },
+            { color: "pink", name: "Розовый приз!", probability: 7 },
+            { color: "cyan", name: "Голубой приз!", probability: 7 },
+            { color: "lime", name: "Лаймовый приз!", probability: 7 },
+            { color: "teal", name: "Бирюзовый приз!", probability: 7 },
+            { color: "navy", name: "Тёмно-синий приз!", probability: 7 },
+            { color: "maroon", name: "Бордовый приз!", probability: 7 },
+            { color: "olive", name: "Оливковый приз!", probability: 7 },
+            { color: "gray", name: "Серый приз!", probability: 7 }
+        ];
+
+        function getRandomPrize() {
+            const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0);
+            let random = Math.random() * totalProbability;
+
+            for (const prize of prizes) {
+                if (random < prize.probability) {
+                    return prize;
+                }
+                random -= prize.probability;
+            }
+        }
+
+        function spinWheel() {
+            const progressBar = document.querySelector(".progress");
+            progressBar.style.width = "100%";
+            spinAgainButton.style.display = "none";
+            wheel.classList.add("spinning");
+            spinSound.play();
+
+            const prize = getRandomPrize();
+            const targetDegree = (prizes.indexOf(prize) * 24) + Math.floor(Math.random() * 24);
+            const randomSpin = 3600 + targetDegree;
+
+            wheel.style.transform = `rotate(${randomSpin}deg)`;
+
+            setTimeout(() => {
+                winSound.play();
+                result.innerText = prize.name;
+                spinAgainButton.style.display = "block";
+                wheel.classList.remove("spinning");
+                progressBar.style.width = "0";
+                updateScore();
+                updateHistory(prize);
+                showConfetti();
+            }, 3000);
+        }
+
+        function updateScore() {
+            score++;
+            scoreDisplay.innerText = `Очки: ${score}`;
+        }
+
+        function updateHistory(prize) {
+            const li = document.createElement("li");
+            li.innerText = prize.name;
+            historyList.appendChild(li);
+        }
+
+        function showConfetti() {
+            confetti.render();
+            setTimeout(() => confetti.clear(), 5000);
+        }
+
+        wheel.addEventListener("click", spinWheel);
+        spinAgainButton.addEventListener("click", spinWheel);
+        document.addEventListener("keydown", (event) => {
+            if (event.code === "Space") {
+                spinWheel();
+            }
+        });
+
+        const translations = {
+            welcome: { en: "Welcome to Starts Fortune!", ru: "Добро пожаловать в Starts Fortune!" },
+            spinAgain: { en: "Spin Again", ru: "Крутить ещё" }
+        };
+        const language = navigator.language.startsWith("ru") ? "ru" : "en";
+        document.querySelector("h1").innerText = translations.welcome[language];
+        spinAgainButton.innerText = translations.spinAgain[language];
+
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+        Telegram.WebApp.MainButton.setText("Крутить колесо");
+        Telegram.WebApp.MainButton.show();
+        Telegram.WebApp.MainButton.onClick(() => {
+            spinWheel();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+</body>
+</html>
