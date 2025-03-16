@@ -15,14 +15,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            background-size: 200% 200%;
-            animation: parallax 10s ease infinite;
-        }
-        @keyframes parallax {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            background-color: #f0f0f0; /* Серый фон */
         }
         h1 {
             font-size: 24px;
@@ -58,10 +51,6 @@
             position: relative;
             cursor: pointer;
             transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-        }
-        .wheel.spinning {
-            box-shadow: 0 0 40px rgba(255, 215, 0, 1);
         }
         .wheel::after {
             content: "";
@@ -79,27 +68,12 @@
             height: 0;
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
-            border-bottom: 40px solid black;
+            border-top: 40px solid black; /* Стрелка направлена вниз */
             position: absolute;
-            top: -20px;
+            bottom: -20px; /* Расположение стрелки внизу */
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
-            animation: shake 0.5s ease-in-out infinite;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(-50%) rotate(0deg); }
-            25% { transform: translateX(-50%) rotate(-5deg); }
-            50% { transform: translateX(-50%) rotate(5deg); }
-            75% { transform: translateX(-50%) rotate(-5deg); }
-        }
-        .star {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            font-size: 20px;
-            transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg));
-            transform-origin: 0 200px;
         }
         .result {
             margin-top: 20px;
@@ -109,12 +83,6 @@
             background-color: rgba(0, 0, 0, 0.7);
             padding: 10px 20px;
             border-radius: 10px;
-            animation: pop 0.5s ease-in-out;
-        }
-        @keyframes pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
         }
         #spinAgain {
             margin-top: 20px;
@@ -125,51 +93,19 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            display: none;
+            display: none; /* Скрыта по умолчанию */
         }
-        #spinAgain:hover {
+        #spinAgain:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #spinAgain:hover:not(:disabled) {
             background-color: #005bb5;
         }
-        #score {
+        .timer {
             margin-top: 10px;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
             color: #333;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-        .progress {
-            width: 0;
-            height: 100%;
-            background-color: #007bff;
-            transition: width 3s linear;
-        }
-        @media (max-width: 600px) {
-            .wheel-container {
-                width: 300px;
-                height: 300px;
-            }
-            h1 {
-                font-size: 20px;
-            }
-        }
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #121212;
-                color: #ffffff;
-            }
-            h1 {
-                color: #ffffff;
-            }
-            #score {
-                color: #ffffff;
-            }
         }
     </style>
 </head>
@@ -177,36 +113,13 @@
     <h1>Добро пожаловать в Starts Fortune!</h1>
     <div class="wheel-container">
         <div class="arrow"></div>
-        <div class="wheel" id="wheel">
-            <div class="star" style="--angle: 10;">⭐️</div>
-            <div class="star" style="--angle: 34;">⭐️</div>
-            <div class="star" style="--angle: 58;">⭐️</div>
-            <div class="star" style="--angle: 82;">⭐️</div>
-            <div class="star" style="--angle: 106;">⭐️</div>
-            <div class="star" style="--angle: 130;">⭐️</div>
-            <div class="star" style="--angle: 154;">⭐️</div>
-            <div class="star" style="--angle: 178;">⭐️</div>
-            <div class="star" style="--angle: 202;">⭐️</div>
-            <div class="star" style="--angle: 226;">⭐️</div>
-            <div class="star" style="--angle: 250;">⭐️</div>
-            <div class="star" style="--angle: 274;">⭐️</div>
-            <div class="star" style="--angle: 298;">⭐️</div>
-            <div class="star" style="--angle: 322;">⭐️</div>
-            <div class="star" style="--angle: 346;">⭐️</div>
-        </div>
-    </div>
-    <div class="progress-bar">
-        <div class="progress"></div>
+        <div class="wheel" id="wheel"></div>
     </div>
     <div class="result" id="result"></div>
-    <div id="score">Очки: 0</div>
     <button id="spinAgain">Крутить ещё</button>
-    <div id="history">
-        <h2>История выигрышей</h2>
-        <ul id="historyList"></ul>
-    </div>
-    <canvas id="confetti"></canvas>
+    <div class="timer" id="timer"></div>
 
+    <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
 
@@ -214,15 +127,12 @@
         const wheel = document.getElementById("wheel");
         const result = document.getElementById("result");
         const spinAgainButton = document.getElementById("spinAgain");
+        const timerDisplay = document.getElementById("timer");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
-        const scoreDisplay = document.getElementById("score");
-        const historyList = document.getElementById("historyList");
-
-        let score = 0;
 
         const prizes = [
-            { color: "#FFD700", name: "Золотой приз! 🎉", probability: 1 },
+            { color: "#FFD700", name: "Золотой приз! 🎉", probability: 1 }, // 1% вероятность
             { color: "red", name: "Красный приз!", probability: 7 },
             { color: "orange", name: "Оранжевый приз!", probability: 7 },
             { color: "yellow", name: "Жёлтый приз!", probability: 7 },
@@ -239,6 +149,9 @@
             { color: "gray", name: "Серый приз!", probability: 7 }
         ];
 
+        let isSpinning = false;
+        let countdown = 0;
+
         function getRandomPrize() {
             const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0);
             let random = Math.random() * totalProbability;
@@ -251,71 +164,53 @@
             }
         }
 
+        function startCountdown() {
+            countdown = 3;
+            timerDisplay.innerText = `Следующая попытка через: ${countdown} сек.`;
+            const interval = setInterval(() => {
+                countdown--;
+                timerDisplay.innerText = `Следующая попытка через: ${countdown} сек.`;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    timerDisplay.innerText = "";
+                    spinAgainButton.disabled = false;
+                }
+            }, 1000);
+        }
+
         function spinWheel() {
-            const progressBar = document.querySelector(".progress");
-            progressBar.style.width = "100%";
+            if (isSpinning) return;
+            isSpinning = true;
             spinAgainButton.style.display = "none";
-            wheel.classList.add("spinning");
             spinSound.play();
 
-            const prize = getRandomPrize();
-            const targetDegree = (prizes.indexOf(prize) * 24) + Math.floor(Math.random() * 24);
-            const randomSpin = 3600 + targetDegree;
+            const prize = getRandomPrize(); // Выбираем приз
+            const targetDegree = (prizes.indexOf(prize) * 24) + Math.floor(Math.random() * 24); // Вычисляем угол
+            const randomSpin = 3600 + targetDegree; // Добавляем полные обороты
 
-            wheel.style.transform = `rotate(${randomSpin}deg)`;
+            // Сбрасываем transform перед каждым вращением
+            wheel.style.transition = "none";
+            wheel.style.transform = "rotate(0deg)";
+            setTimeout(() => {
+                wheel.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)";
+                wheel.style.transform = `rotate(${randomSpin}deg)`;
+            }, 10);
 
             setTimeout(() => {
                 winSound.play();
-                result.innerText = prize.name;
+                result.innerText = prize.name; // Показываем результат
                 spinAgainButton.style.display = "block";
-                wheel.classList.remove("spinning");
-                progressBar.style.width = "0";
-                updateScore();
-                updateHistory(prize);
-                showConfetti();
+                spinAgainButton.disabled = true;
+                isSpinning = false;
+                startCountdown(); // Запускаем таймер
             }, 3000);
         }
 
-        function updateScore() {
-            score++;
-            scoreDisplay.innerText = `Очки: ${score}`;
-        }
-
-        function updateHistory(prize) {
-            const li = document.createElement("li");
-            li.innerText = prize.name;
-            historyList.appendChild(li);
-        }
-
-        function showConfetti() {
-            confetti.render();
-            setTimeout(() => confetti.clear(), 5000);
-        }
-
+        // Обработчик клика на колесо
         wheel.addEventListener("click", spinWheel);
+
+        // Обработчик клика на кнопку "Крутить ещё"
         spinAgainButton.addEventListener("click", spinWheel);
-        document.addEventListener("keydown", (event) => {
-            if (event.code === "Space") {
-                spinWheel();
-            }
-        });
-
-        const translations = {
-            welcome: { en: "Welcome to Starts Fortune!", ru: "Добро пожаловать в Starts Fortune!" },
-            spinAgain: { en: "Spin Again", ru: "Крутить ещё" }
-        };
-        const language = navigator.language.startsWith("ru") ? "ru" : "en";
-        document.querySelector("h1").innerText = translations.welcome[language];
-        spinAgainButton.innerText = translations.spinAgain[language];
-
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand();
-        Telegram.WebApp.MainButton.setText("Крутить колесо");
-        Telegram.WebApp.MainButton.show();
-        Telegram.WebApp.MainButton.onClick(() => {
-            spinWheel();
-        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
