@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Mini App</title>
+    <title>Starts Fortune</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -9,23 +9,90 @@
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
+            background-color: #f0f0f0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .wheel {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                red 0% 20%,
+                orange 20% 40%,
+                yellow 40% 60%,
+                green 60% 80%,
+                blue 80% 100%
+            );
+            position: relative;
+            cursor: pointer;
+            transition: transform 3s ease-out;
+        }
+        .wheel::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: black;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid black;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .result {
             margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Hello, Telegram!</h1>
-    <p>This is a simple mini app.</p>
-    <button onclick="sendData()">Click Me!</button>
+    <h1>Добро пожаловать в Starts Fortune!</h1>
+    <div class="wheel-container">
+        <div class="wheel" id="wheel"></div>
+        <div class="arrow"></div>
+    </div>
+    <div class="result" id="result"></div>
 
     <script>
-        function sendData() {
-            Telegram.WebApp.sendData("Button clicked!");
-        }
+        const wheel = document.getElementById("wheel");
+        const result = document.getElementById("result");
+
+        wheel.addEventListener("click", () => {
+            const randomSpin = Math.floor(Math.random() * 3600) + 360; // Случайное вращение
+            wheel.style.transform = `rotate(${randomSpin}deg)`;
+
+            setTimeout(() => {
+                const degrees = randomSpin % 360;
+                let prize;
+                if (degrees < 72) prize = "Красный приз!";
+                else if (degrees < 144) prize = "Оранжевый приз!";
+                else if (degrees < 216) prize = "Жёлтый приз!";
+                else if (degrees < 288) prize = "Зелёный приз!";
+                else prize = "Синий приз!";
+                result.innerText = prize;
+            }, 3000); // Результат через 3 секунды
+        });
 
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
