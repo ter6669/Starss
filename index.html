@@ -60,6 +60,15 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
+        .wheel::before {
+            content: "⭐️";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 40px;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
         .arrow {
             width: 0;
             height: 0;
@@ -70,7 +79,7 @@
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1;
+            z-index: 2;
         }
         .result {
             margin-top: 20px;
@@ -157,6 +166,10 @@
                 winSound.play(); // Звук победы
                 result.innerText = prize.name; // Показываем результат
                 spinAgainButton.style.display = "block"; // Показать кнопку "Крутить ещё"
+
+                // Показываем стрелку, указывающую на выигрышный цвет
+                const arrow = document.querySelector(".arrow");
+                arrow.style.display = "block";
             }, 3000);
         }
 
