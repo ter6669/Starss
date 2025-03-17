@@ -53,9 +53,9 @@
             border-right: 20px solid transparent;
             border-top: 40px solid gold;
             position: absolute;
-            top: 50%;
+            top: -50px; /* Поднимаем стрелку выше */
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             z-index: 2;
         }
         .result {
@@ -88,6 +88,18 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+        .balance {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -115,11 +127,36 @@
             <div class="square">1</div>
             <div class="square">1</div>
             <div class="square">10</div>
+            <!-- Дублируем квадраты для эффекта бесконечности -->
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">10</div>
         </div>
         <div class="arrow"></div>
     </div>
     <div class="result" id="result"></div>
     <button id="spinButton">GO</button>
+
+    <!-- Баланс -->
+    <div class="balance" id="balance">Баланс: 100 монет</div>
 
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
@@ -129,21 +166,30 @@
         const squaresContainer = document.getElementById("squares");
         const result = document.getElementById("result");
         const spinButton = document.getElementById("spinButton");
+        const balanceDisplay = document.getElementById("balance");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
         const squares = Array.from(document.querySelectorAll(".square"));
         const squareWidth = squares[0].offsetWidth + 10; // Ширина квадрата + отступ
-        const totalSquares = squares.length;
+        const totalSquares = squares.length / 2; // Учитываем дублирование
 
         let isSpinning = false;
         let currentPosition = 0;
         let targetPosition = 0;
+        let balance = 100; // Начальный баланс
+
+        // Обновление баланса
+        function updateBalance() {
+            balanceDisplay.innerText = `Баланс: ${balance} монет`;
+        }
 
         // Логика вращения
         function spin() {
-            if (isSpinning) return;
+            if (isSpinning || balance < 1) return;
             isSpinning = true;
+            balance -= 1; // Снимаем 1 монету за вращение
+            updateBalance();
             spinButton.disabled = true;
             spinSound.play();
 
@@ -173,7 +219,9 @@
                         spinButton.disabled = false;
 
                         // Показ результата
-                        const prize = squares[randomIndex].innerText;
+                        const prize = parseInt(squares[randomIndex].innerText);
+                        balance += prize; // Добавляем выигрыш
+                        updateBalance();
                         result.innerText = `Вы выиграли ${prize} монет! 🎉`;
                         winSound.play();
                     } else {
