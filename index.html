@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Колесо Фортуны</title>
+    <title>Fortune Spin</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             text-align: center;
             padding: 0;
             margin: 0;
@@ -15,7 +15,9 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #808080; /* Серый фон */
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            overflow: hidden;
         }
         .wheel-container {
             position: relative;
@@ -28,14 +30,23 @@
             height: 100%;
             border-radius: 50%;
             background: conic-gradient(
-                #FFD700 0% 6.67%, #FF6347 6.67% 13.33%,
-                #00CED1 13.33% 20%, #FF69B4 20% 26.67%,
-                #7B68EE 26.67% 33.33%, #32CD32 33.33% 40%,
-                #FF4500 40% 46.67%, #8A2BE2 46.67% 53.33%,
-                #00FA9A 53.33% 60%, #FF8C00 60% 66.67%,
-                #6A5ACD 66.67% 73.33%, #FF1493 73.33% 80%,
-                #20B2AA 80% 86.67%, #FFD700 86.67% 93.33%,
-                #FF6347 93.33% 100%
+                #FFD700 0% 2%, #FF6347 2% 4%, #00CED1 4% 6%,
+                #FF69B4 6% 8%, #7B68EE 8% 10%, #32CD32 10% 12%,
+                #FF4500 12% 14%, #8A2BE2 14% 16%, #00FA9A 16% 18%,
+                #FF8C00 18% 20%, #6A5ACD 20% 22%, #FF1493 22% 24%,
+                #20B2AA 24% 26%, #FFD700 26% 28%, #FF6347 28% 30%,
+                #00CED1 30% 32%, #FF69B4 32% 34%, #7B68EE 34% 36%,
+                #32CD32 36% 38%, #FF4500 38% 40%, #8A2BE2 40% 42%,
+                #00FA9A 42% 44%, #FF8C00 44% 46%, #6A5ACD 46% 48%,
+                #FF1493 48% 50%, #20B2AA 50% 52%, #FFD700 52% 54%,
+                #FF6347 54% 56%, #00CED1 56% 58%, #FF69B4 58% 60%,
+                #7B68EE 60% 62%, #32CD32 62% 64%, #FF4500 64% 66%,
+                #8A2BE2 66% 68%, #00FA9A 68% 70%, #FF8C00 70% 72%,
+                #6A5ACD 72% 74%, #FF1493 74% 76%, #20B2AA 76% 78%,
+                #FFD700 78% 80%, #FF6347 80% 82%, #00CED1 82% 84%,
+                #FF69B4 84% 86%, #7B68EE 86% 88%, #32CD32 88% 90%,
+                #FF4500 90% 92%, #8A2BE2 92% 94%, #00FA9A 94% 96%,
+                #FF8C00 96% 98%, #6A5ACD 98% 100%
             );
             position: relative;
             cursor: pointer;
@@ -143,16 +154,30 @@
             background-color: #FFD700;
             color: black;
         }
+        .invite {
+            position: fixed;
+            bottom: 140px;
+            left: 20px;
+            font-size: 16px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+        .invite:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
     </style>
 </head>
 <body>
-    <h1>Колесо Фортуны</h1>
+    <div class="result" id="result"></div>
     <div class="wheel-container">
         <div class="arrow"></div>
         <div class="wheel" id="wheel"></div>
         <button id="spinButton">GO</button>
     </div>
-    <div class="result" id="result"></div>
 
     <!-- Баланс -->
     <div class="balance" id="balance">Баланс: 10 монет</div>
@@ -167,6 +192,9 @@
         <button onclick="changeBet(10)">10x</button>
     </div>
 
+    <!-- Пригласить друга -->
+    <div class="invite" id="inviteButton">Пригласить друга (+5 вращений)</div>
+
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
@@ -177,6 +205,7 @@
         const spinButton = document.getElementById("spinButton");
         const balanceDisplay = document.getElementById("balance");
         const currentBetDisplay = document.getElementById("currentBet");
+        const inviteButton = document.getElementById("inviteButton");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
@@ -201,6 +230,7 @@
         let isSpinning = false;
         let balance = 10; // Начальный баланс
         let currentBet = 1; // Текущая ставка
+        let spinsLeft = 0; // Оставшиеся вращения
 
         // Обновление баланса
         function updateBalance() {
@@ -258,6 +288,12 @@
             const randomIndex = Math.floor(Math.random() * totalProbability);
             return prizes[randomIndex];
         }
+
+        // Пригласить друга
+        inviteButton.addEventListener("click", () => {
+            spinsLeft += 5;
+            alert("Вы получили +5 вращений за приглашение друга!");
+        });
 
         // Обработчик клика на кнопку "GO"
         spinButton.addEventListener("click", spinWheel);
