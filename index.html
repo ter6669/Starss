@@ -30,26 +30,22 @@
             height: 100%;
             border-radius: 50%;
             background: conic-gradient(
-                #FF6347 0% 4.76%, #FF6347 4.76% 9.52%,
-                #FF6347 9.52% 14.28%, #FF6347 14.28% 19.04%,
-                #FF6347 19.04% 23.8%, #FF6347 23.8% 28.56%,
-                #FF6347 28.56% 33.32%, #FF6347 33.32% 38.08%,
-                #FF6347 38.08% 42.84%, #FF6347 42.84% 47.6%,
-                #32CD32 47.6% 52.36%, #32CD32 52.36% 57.12%,
-                #32CD32 57.12% 61.88%, #32CD32 61.88% 66.64%,
-                #32CD32 66.64% 71.4%, #32CD32 71.4% 76.16%,
-                #32CD32 76.16% 80.92%, #32CD32 80.92% 85.68%,
-                #32CD32 85.68% 90.44%, #32CD32 90.44% 95.2%,
+                #555 0% 4.76%, #555 4.76% 9.52%,
+                #555 9.52% 14.28%, #555 14.28% 19.04%,
+                #555 19.04% 23.8%, #555 23.8% 28.56%,
+                #555 28.56% 33.32%, #555 33.32% 38.08%,
+                #555 38.08% 42.84%, #555 42.84% 47.6%,
+                #555 47.6% 52.36%, #555 52.36% 57.12%,
+                #555 57.12% 61.88%, #555 61.88% 66.64%,
+                #555 66.64% 71.4%, #555 71.4% 76.16%,
+                #555 76.16% 80.92%, #555 80.92% 85.68%,
+                #555 85.68% 90.44%, #555 90.44% 95.2%,
                 #FFD700 95.2% 100%
             );
             position: relative;
             cursor: pointer;
-            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1), scale 0.5s ease-in-out;
-            border: 8px solid #fff;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-        }
-        .wheel:hover {
-            transform: scale(1.05); /* Анимация увеличения */
+            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            border: 8px solid black; /* Черная рамка вокруг колеса */
         }
         .wheel::after {
             content: "";
@@ -58,7 +54,7 @@
             left: 50%;
             width: 20px;
             height: 20px;
-            background: #fff;
+            background: black;
             border-radius: 50%;
             transform: translate(-50%, -50%);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -151,87 +147,9 @@
             background-color: #FFD700;
             color: black;
         }
-        .invite {
-            position: fixed;
-            bottom: 140px;
-            left: 20px;
-            font-size: 16px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-        }
-        .invite:hover {
-            background-color: rgba(0, 0, 0, 0.9);
-        }
-        .sale-icon {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #FFD700;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-        }
-        .sale-timer {
-            font-size: 16px;
-            color: white;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-            z-index: 1000;
-        }
-        .modal-content {
-            text-align: center;
-        }
-        .modal button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #FF6347;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .modal button:hover {
-            background-color: #FF4500;
-        }
     </style>
 </head>
 <body>
-    <!-- Иконка SALE с таймером -->
-    <div class="sale-icon" id="saleIcon">
-        SALE
-        <div class="sale-timer" id="saleTimer">01:59:59</div>
-    </div>
-
-    <!-- Модальное окно для покупки вращений -->
-    <div class="modal" id="buySpinsModal">
-        <div class="modal-content">
-            <h2>Купить вращения</h2>
-            <p>1 звезда = 1 вращение</p>
-            <button onclick="buySpins(1)">Купить 1 вращение</button>
-            <button onclick="buySpins(5)">Купить 5 вращений</button>
-            <button onclick="buySpins(10)">Купить 10 вращений</button>
-            <button onclick="closeModal()">Закрыть</button>
-        </div>
-    </div>
-
     <div class="result" id="result"></div>
     <div class="wheel-container">
         <div class="arrow"></div>
@@ -252,9 +170,6 @@
         <button onclick="changeBet(10)">10x</button>
     </div>
 
-    <!-- Пригласить друга -->
-    <div class="invite" id="inviteButton">Пригласить друга (+5 вращений)</div>
-
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
@@ -265,83 +180,92 @@
         const spinButton = document.getElementById("spinButton");
         const balanceDisplay = document.getElementById("balance");
         const currentBetDisplay = document.getElementById("currentBet");
-        const inviteButton = document.getElementById("inviteButton");
-        const saleIcon = document.getElementById("saleIcon");
-        const saleTimer = document.getElementById("saleTimer");
-        const buySpinsModal = document.getElementById("buySpinsModal");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
         const prizes = [
-            { color: "#FF6347", value: 0 }, // Проигрыш
-            { color: "#FF6347", value: 0 },
-            { color: "#FF6347", value: 0 },
-            { color: "#FF6347", value: 0 },
-            { color: "#FF6347", value: 0 },
-            { color: "#FF6347", value: 0 },
-            { color: "#FF6347", value: 0 },
-            { color: "#FF6347", value: 0 },
-            { color: "#FF6347", value: 0 },
-            { color: "#FF6347", value: 0 },
-            { color: "#32CD32", value: 2 }, // Выигрыш x2
-            { color: "#32CD32", value: 2 },
-            { color: "#32CD32", value: 2 },
-            { color: "#32CD32", value: 2 },
-            { color: "#32CD32", value: 2 },
-            { color: "#32CD32", value: 2 },
-            { color: "#32CD32", value: 2 },
-            { color: "#32CD32", value: 2 },
-            { color: "#32CD32", value: 2 },
-            { color: "#32CD32", value: 2 },
-            { color: "#FFD700", value: 10 } // Супер-выигрыш x10
+            { color: "#555", value: 1 }, // Темно-серый сектор
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#555", value: 1 },
+            { color: "#FFD700", value: 10 } // Золотой сектор
         ];
 
         let isSpinning = false;
         let balance = 100; // Начальный баланс
         let currentBet = 1; // Текущая ставка
-        let spinsLeft = 0; // Оставшиеся вращения
 
-        // Таймер SALE
-        let saleTime = 7199; // 1 час 59 минут 59 секунд в секундах
-        const saleInterval = setInterval(() => {
-            saleTime--;
-            if (saleTime <= 0) {
-                clearInterval(saleInterval);
-                saleIcon.style.display = "none";
-            } else {
-                const hours = Math.floor(saleTime / 3600);
-                const minutes = Math.floor((saleTime % 3600) / 60);
-                const seconds = saleTime % 60;
-                saleTimer.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            }
-        }, 1000);
-
-        // Открыть модальное окно для покупки вращений
-        saleIcon.addEventListener("click", () => {
-            buySpinsModal.style.display = "block";
-        });
-
-        // Закрыть модальное окно
-        function closeModal() {
-            buySpinsModal.style.display = "none";
+        // Обновление баланса
+        function updateBalance() {
+            balanceDisplay.innerText = `Баланс: ${balance} монет`;
         }
 
-        // Купить вращения
-        function buySpins(amount) {
-            spinsLeft += amount;
-            balance += amount; // Увеличиваем баланс
+        // Изменение ставки
+        function changeBet(multiplier) {
+            currentBet = multiplier;
+            currentBetDisplay.innerText = currentBet;
+            document.querySelectorAll(".bet button").forEach(button => {
+                button.classList.remove("active");
+            });
+            event.target.classList.add("active");
+        }
+
+        // Логика вращения
+        function spinWheel() {
+            if (isSpinning || balance < currentBet) return;
+            isSpinning = true;
+            balance -= currentBet; // Снимаем ставку
             updateBalance();
-            alert(`Вы купили ${amount} вращений!`);
-            closeModal();
+            spinButton.disabled = true;
+            spinSound.play();
+
+            const prize = getRandomPrize();
+            const targetDegree = (360 - (prizes.indexOf(prize) * (360 / prizes.length))) + (360 / prizes.length / 2);
+            const randomSpin = 3600 + targetDegree;
+
+            wheel.style.transition = "none";
+            wheel.style.transform = "rotate(0deg)";
+            setTimeout(() => {
+                wheel.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)";
+                wheel.style.transform = `rotate(${randomSpin}deg)`;
+            }, 10);
+
+            setTimeout(() => {
+                winSound.play();
+                const winAmount = prize.value * currentBet;
+                balance += winAmount; // Добавляем выигрыш
+                updateBalance();
+                result.innerText = `Вы выиграли ${winAmount} монет! 🎉`;
+                spinButton.disabled = false;
+                isSpinning = false;
+            }, 3000);
         }
 
-        // Пригласить друга
-        inviteButton.addEventListener("click", () => {
-            const link = "https://ваш-сайт.com/приглашение";
-            prompt("Скопируйте ссылку и отправьте другу:", link);
-        });
+        // Получение случайного приза
+        function getRandomPrize() {
+            const totalProbability = prizes.length;
+            const randomIndex = Math.floor(Math.random() * totalProbability);
+            return prizes[randomIndex];
+        }
 
-        // Остальная логика...
+        // Обработчик клика на кнопку "GO"
+        spinButton.addEventListener("click", spinWheel);
     </script>
 </body>
 </html>
