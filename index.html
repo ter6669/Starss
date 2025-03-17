@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Загрузочный экран</title>
+    <title>Starts Fortune</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -15,6 +15,9 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            background-image: url('background.jpg'); /* Фон для колеса фортуны */
+            background-size: cover; /* Растянуть фон на весь экран */
+            background-position: center; /* Центрировать фон */
             overflow: hidden;
         }
         /* Загрузочный экран */
@@ -24,7 +27,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #333; /* Темный фон */
+            background-image: url('loading-background.jpg'); /* Фон для загрузочного экрана */
+            background-size: cover; /* Растянуть фон на весь экран */
+            background-position: center; /* Центрировать фон */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -52,6 +57,92 @@
         #mainContent {
             display: none; /* Скрыт до завершения загрузки */
         }
+        .wheel-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #FFD700 0% 6.67%, /* Золотой сектор */
+                #555 6.67% 13.33%, /* Темно-серый */
+                #555 13.33% 20%,
+                #555 20% 26.67%,
+                #555 26.67% 33.33%,
+                #555 33.33% 40%,
+                #555 40% 46.67%,
+                #555 46.67% 53.33%,
+                #555 53.33% 60%,
+                #555 60% 66.67%,
+                #555 66.67% 73.33%,
+                #555 73.33% 80%,
+                #555 80% 86.67%,
+                #555 86.67% 93.33%,
+                #555 93.33% 100%
+            );
+            position: relative;
+            cursor: pointer;
+            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            border: 5px solid black; /* Черная рамка вокруг колеса */
+        }
+        .wheel::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: black;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid black; /* Стрелка направлена вверх */
+            position: absolute;
+            top: -20px; /* Расположение стрелки вверху */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        #spinAgain {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none; /* Скрыта по умолчанию */
+        }
+        #spinAgain:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #spinAgain:hover:not(:disabled) {
+            background-color: #005bb5;
+        }
+        .timer {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -66,8 +157,18 @@
     <!-- Основной экран -->
     <div id="mainContent">
         <h1>Добро пожаловать в Starts Fortune!</h1>
-        <p>Загрузка завершена!</p>
+        <div class="wheel-container">
+            <div class="arrow"></div>
+            <div class="wheel" id="wheel"></div>
+        </div>
+        <div class="result" id="result"></div>
+        <button id="spinAgain">Крутить ещё</button>
+        <div class="timer" id="timer"></div>
     </div>
+
+    <!-- Аудио -->
+    <audio id="spinSound" src="spin.mp3"></audio>
+    <audio id="winSound" src="win.mp3"></audio>
 
     <script>
         // Загрузочный экран
@@ -85,6 +186,95 @@
             loadingScreen.style.display = "none"; // Скрываем загрузочный экран
             mainContent.style.display = "block"; // Показываем основной экран
         }, 3000);
+
+        // Логика колеса фортуны
+        const wheel = document.getElementById("wheel");
+        const result = document.getElementById("result");
+        const spinAgainButton = document.getElementById("spinAgain");
+        const timerDisplay = document.getElementById("timer");
+        const spinSound = document.getElementById("spinSound");
+        const winSound = document.getElementById("winSound");
+
+        const prizes = [
+            { color: "#FFD700", name: "Золотой приз! 🎉", probability: 1 }, // 1% вероятность
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 }
+        ];
+
+        let isSpinning = false;
+        let countdown = 0;
+
+        function getRandomPrize() {
+            const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0);
+            let random = Math.random() * totalProbability;
+
+            for (const prize of prizes) {
+                if (random < prize.probability) {
+                    return prize;
+                }
+                random -= prize.probability;
+            }
+        }
+
+        function startCountdown() {
+            countdown = 3;
+            timerDisplay.innerText = `Следующая попытка через: ${countdown} сек.`;
+            const interval = setInterval(() => {
+                countdown--;
+                timerDisplay.innerText = `Следующая попытка через: ${countdown} сек.`;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    timerDisplay.innerText = "";
+                    spinAgainButton.disabled = false;
+                }
+            }, 1000);
+        }
+
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+            spinAgainButton.style.display = "none";
+            spinSound.play();
+
+            const prize = getRandomPrize(); // Выбираем приз
+            const targetDegree = (360 - (prizes.indexOf(prize) * 24) + 12; // Центр сектора
+            const randomSpin = 3600 + targetDegree; // Добавляем полные обороты
+
+            // Сбрасываем transform перед каждым вращением
+            wheel.style.transition = "none";
+            wheel.style.transform = "rotate(0deg)";
+            setTimeout(() => {
+                wheel.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)";
+                wheel.style.transform = `rotate(${randomSpin}deg)`;
+            }, 10);
+
+            setTimeout(() => {
+                winSound.play();
+                result.innerText = prize.name; // Показываем результат
+                spinAgainButton.style.display = "block";
+                spinAgainButton.disabled = true;
+                isSpinning = false;
+                startCountdown(); // Запускаем таймер
+            }, 3000);
+        }
+
+        // Обработчик клика на колесо
+        wheel.addEventListener("click", spinWheel);
+
+        // Обработчик клика на кнопку "Крутить ещё"
+        spinAgainButton.addEventListener("click", spinWheel);
     </script>
 </body>
 </html>
