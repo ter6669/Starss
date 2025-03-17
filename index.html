@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* 1. Новый шрифт для современного вида */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             text-align: center;
             padding: 0;
             margin: 0;
@@ -15,39 +18,44 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #808080; /* Серый фон */
+            background: linear-gradient(135deg, #1e3c72, #2a5298); /* 2. Градиентный фон */
+            color: white;
         }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 3. Тень текста */
+        }
+
         .wheel-container {
             position: relative;
             width: 400px;
             height: 400px;
+            margin-bottom: 20px;
         }
+
         .wheel {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             background: conic-gradient(
-                #FFD700 0% 6.67%, /* Золотой сектор */
-                #555 6.67% 13.33%, /* Темно-серый */
-                #555 13.33% 20%,
-                #555 20% 26.67%,
-                #555 26.67% 33.33%,
-                #555 33.33% 40%,
-                #555 40% 46.67%,
-                #555 46.67% 53.33%,
-                #555 53.33% 60%,
-                #555 60% 66.67%,
-                #555 66.67% 73.33%,
-                #555 73.33% 80%,
-                #555 80% 86.67%,
-                #555 86.67% 93.33%,
-                #555 93.33% 100%
+                #FFD700 0% 6.67%, #FF6347 6.67% 13.33%, /* 4. Яркие цвета секторов */
+                #00CED1 13.33% 20%, #FF69B4 20% 26.67%,
+                #7B68EE 26.67% 33.33%, #32CD32 33.33% 40%,
+                #FF4500 40% 46.67%, #8A2BE2 46.67% 53.33%,
+                #00FA9A 53.33% 60%, #FF8C00 60% 66.67%,
+                #6A5ACD 66.67% 73.33%, #FF1493 73.33% 80%,
+                #20B2AA 80% 86.67%, #FFD700 86.67% 93.33%,
+                #FF6347 93.33% 100%
             );
             position: relative;
             cursor: pointer;
             transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
-            border: 5px solid black; /* Черная рамка вокруг колеса */
+            border: 8px solid #fff; /* 5. Белая рамка */
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); /* 6. Свечение колеса */
         }
+
         .wheel::after {
             content: "";
             position: absolute;
@@ -55,53 +63,81 @@
             left: 50%;
             width: 20px;
             height: 20px;
-            background: black;
+            background: #fff;
             border-radius: 50%;
             transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 7. Тень центра */
         }
+
         .arrow {
             width: 0;
             height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid black; /* Стрелка направлена вверх */
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 50px solid #FFD700; /* 8. Золотая стрелка */
             position: absolute;
-            top: -20px; /* Расположение стрелки вверху */
+            top: -30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)); /* 9. Свечение стрелки */
         }
+
         .result {
             margin-top: 20px;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
             color: white;
             background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
+            padding: 15px 30px;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 10. Тень результата */
         }
+
         #spinAgain {
             margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #FF6347; /* 11. Яркая кнопка */
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px; /* 12. Закругленные углы */
             cursor: pointer;
-            display: none; /* Скрыта по умолчанию */
+            display: none;
+            transition: background-color 0.3s, transform 0.2s; /* 13. Плавные переходы */
         }
+
+        #spinAgain:hover {
+            background-color: #FF4500; /* 14. Изменение цвета при наведении */
+            transform: scale(1.05); /* 15. Увеличение кнопки */
+        }
+
         #spinAgain:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
-        #spinAgain:hover:not(:disabled) {
-            background-color: #005bb5;
-        }
+
         .timer {
             margin-top: 10px;
-            font-size: 16px;
-            color: #333;
+            font-size: 18px;
+            color: #FFD700; /* 16. Золотой текст */
+        }
+
+        /* 17. Анимация загрузки (если нужно) */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 18. Медиа-запросы для адаптивности */
+        @media (max-width: 600px) {
+            .wheel-container {
+                width: 300px;
+                height: 300px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -129,21 +165,21 @@
         const winSound = document.getElementById("winSound");
 
         const prizes = [
-            { color: "#FFD700", name: "Золотой приз! 🎉", probability: 1 }, // 1% вероятность
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 },
-            { color: "#555", name: "Темно-серый приз!", probability: 7 }
+            { color: "#FFD700", name: "Золотой приз! 🎉", probability: 1 },
+            { color: "#FF6347", name: "Красный приз! 🔥", probability: 7 },
+            { color: "#00CED1", name: "Бирюзовый приз! 💎", probability: 7 },
+            { color: "#FF69B4", name: "Розовый приз! 🌸", probability: 7 },
+            { color: "#7B68EE", name: "Фиолетовый приз! 🍇", probability: 7 },
+            { color: "#32CD32", name: "Зеленый приз! 🌿", probability: 7 },
+            { color: "#FF4500", name: "Оранжевый приз! 🍊", probability: 7 },
+            { color: "#8A2BE2", name: "Синий приз! 🔵", probability: 7 },
+            { color: "#00FA9A", name: "Мятный приз! 🍃", probability: 7 },
+            { color: "#FF8C00", name: "Темно-оранжевый приз! 🎃", probability: 7 },
+            { color: "#6A5ACD", name: "Сланцевый приз! 🪨", probability: 7 },
+            { color: "#FF1493", name: "Глубокий розовый приз! 🌺", probability: 7 },
+            { color: "#20B2AA", name: "Морской приз! 🌊", probability: 7 },
+            { color: "#FFD700", name: "Золотой приз! 🎉", probability: 7 },
+            { color: "#FF6347", name: "Красный приз! 🔥", probability: 7 }
         ];
 
         let isSpinning = false;
@@ -181,11 +217,10 @@
             spinAgainButton.style.display = "none";
             spinSound.play();
 
-            const prize = getRandomPrize(); // Выбираем приз
-            const targetDegree = (360 - (prizes.indexOf(prize) * 24)) + 12; // Центр сектора
-            const randomSpin = 3600 + targetDegree; // Добавляем полные обороты
+            const prize = getRandomPrize();
+            const targetDegree = (360 - (prizes.indexOf(prize) * 24)) + 12;
+            const randomSpin = 3600 + targetDegree;
 
-            // Сбрасываем transform перед каждым вращением
             wheel.style.transition = "none";
             wheel.style.transform = "rotate(0deg)";
             setTimeout(() => {
@@ -195,18 +230,15 @@
 
             setTimeout(() => {
                 winSound.play();
-                result.innerText = prize.name; // Показываем результат
+                result.innerText = prize.name;
                 spinAgainButton.style.display = "block";
                 spinAgainButton.disabled = true;
                 isSpinning = false;
-                startCountdown(); // Запускаем таймер
+                startCountdown();
             }, 3000);
         }
 
-        // Обработчик клика на колесо
         wheel.addEventListener("click", spinWheel);
-
-        // Обработчик клика на кнопку "Крутить ещё"
         spinAgainButton.addEventListener("click", spinWheel);
     </script>
 </body>
