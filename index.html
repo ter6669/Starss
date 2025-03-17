@@ -329,6 +329,8 @@
         // Купить вращения
         function buySpins(amount) {
             spinsLeft += amount;
+            balance += amount; // Увеличиваем баланс
+            updateBalance();
             alert(`Вы купили ${amount} вращений!`);
             closeModal();
         }
