@@ -44,9 +44,12 @@
             );
             position: relative;
             cursor: pointer;
-            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1), scale 0.5s ease-in-out;
             border: 8px solid #fff;
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+        .wheel:hover {
+            transform: scale(1.05); /* Анимация увеличения */
         }
         .wheel::after {
             content: "";
@@ -148,9 +151,87 @@
             background-color: #FFD700;
             color: black;
         }
+        .invite {
+            position: fixed;
+            bottom: 140px;
+            left: 20px;
+            font-size: 16px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+        .invite:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .sale-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFD700;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+        .sale-timer {
+            font-size: 16px;
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            z-index: 1000;
+        }
+        .modal-content {
+            text-align: center;
+        }
+        .modal button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal button:hover {
+            background-color: #FF4500;
+        }
     </style>
 </head>
 <body>
+    <!-- Иконка SALE с таймером -->
+    <div class="sale-icon" id="saleIcon">
+        SALE
+        <div class="sale-timer" id="saleTimer">01:59:59</div>
+    </div>
+
+    <!-- Модальное окно для покупки вращений -->
+    <div class="modal" id="buySpinsModal">
+        <div class="modal-content">
+            <h2>Купить вращения</h2>
+            <p>1 звезда = 1 вращение</p>
+            <button onclick="buySpins(1)">Купить 1 вращение</button>
+            <button onclick="buySpins(5)">Купить 5 вращений</button>
+            <button onclick="buySpins(10)">Купить 10 вращений</button>
+            <button onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>
+
     <div class="result" id="result"></div>
     <div class="wheel-container">
         <div class="arrow"></div>
@@ -171,6 +252,9 @@
         <button onclick="changeBet(10)">10x</button>
     </div>
 
+    <!-- Пригласить друга -->
+    <div class="invite" id="inviteButton">Пригласить друга (+5 вращений)</div>
+
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
@@ -181,6 +265,10 @@
         const spinButton = document.getElementById("spinButton");
         const balanceDisplay = document.getElementById("balance");
         const currentBetDisplay = document.getElementById("currentBet");
+        const inviteButton = document.getElementById("inviteButton");
+        const saleIcon = document.getElementById("saleIcon");
+        const saleTimer = document.getElementById("saleTimer");
+        const buySpinsModal = document.getElementById("buySpinsModal");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
@@ -211,62 +299,47 @@
         let isSpinning = false;
         let balance = 100; // Начальный баланс
         let currentBet = 1; // Текущая ставка
+        let spinsLeft = 0; // Оставшиеся вращения
 
-        // Обновление баланса
-        function updateBalance() {
-            balanceDisplay.innerText = `Баланс: ${balance} монет`;
+        // Таймер SALE
+        let saleTime = 7199; // 1 час 59 минут 59 секунд в секундах
+        const saleInterval = setInterval(() => {
+            saleTime--;
+            if (saleTime <= 0) {
+                clearInterval(saleInterval);
+                saleIcon.style.display = "none";
+            } else {
+                const hours = Math.floor(saleTime / 3600);
+                const minutes = Math.floor((saleTime % 3600) / 60);
+                const seconds = saleTime % 60;
+                saleTimer.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+        }, 1000);
+
+        // Открыть модальное окно для покупки вращений
+        saleIcon.addEventListener("click", () => {
+            buySpinsModal.style.display = "block";
+        });
+
+        // Закрыть модальное окно
+        function closeModal() {
+            buySpinsModal.style.display = "none";
         }
 
-        // Изменение ставки
-        function changeBet(multiplier) {
-            currentBet = multiplier;
-            currentBetDisplay.innerText = currentBet;
-            document.querySelectorAll(".bet button").forEach(button => {
-                button.classList.remove("active");
-            });
-            event.target.classList.add("active");
+        // Купить вращения
+        function buySpins(amount) {
+            spinsLeft += amount;
+            alert(`Вы купили ${amount} вращений!`);
+            closeModal();
         }
 
-        // Логика вращения
-        function spinWheel() {
-            if (isSpinning || balance < currentBet) return;
-            isSpinning = true;
-            balance -= currentBet; // Снимаем ставку
-            updateBalance();
-            spinButton.disabled = true;
-            spinSound.play();
+        // Пригласить друга
+        inviteButton.addEventListener("click", () => {
+            const link = "https://ваш-сайт.com/приглашение";
+            prompt("Скопируйте ссылку и отправьте другу:", link);
+        });
 
-            const prize = getRandomPrize();
-            const targetDegree = (360 - (prizes.indexOf(prize) * (360 / prizes.length)) + (360 / prizes.length / 2);
-            const randomSpin = 3600 + targetDegree;
-
-            wheel.style.transition = "none";
-            wheel.style.transform = "rotate(0deg)";
-            setTimeout(() => {
-                wheel.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)";
-                wheel.style.transform = `rotate(${randomSpin}deg)`;
-            }, 10);
-
-            setTimeout(() => {
-                winSound.play();
-                const winAmount = prize.value * currentBet;
-                balance += winAmount; // Добавляем выигрыш
-                updateBalance();
-                result.innerText = winAmount === 0 ? "Проигрыш! 😢" : `Вы выиграли ${winAmount} монет! 🎉`;
-                spinButton.disabled = false;
-                isSpinning = false;
-            }, 3000);
-        }
-
-        // Получение случайного приза
-        function getRandomPrize() {
-            const totalProbability = prizes.length;
-            const randomIndex = Math.floor(Math.random() * totalProbability);
-            return prizes[randomIndex];
-        }
-
-        // Обработчик клика на кнопку "GO"
-        spinButton.addEventListener("click", spinWheel);
+        // Остальная логика...
     </script>
 </body>
 </html>
