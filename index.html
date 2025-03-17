@@ -21,6 +21,7 @@
             position: relative;
             width: 400px;
             height: 400px;
+            margin-bottom: 20px;
         }
         .wheel {
             width: 100%;
@@ -102,6 +103,47 @@
             font-size: 18px;
             color: #FFD700;
         }
+        .balance {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .bet {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            font-size: 16px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .bet button {
+            margin: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .bet button:hover {
+            background-color: #005bb5;
+        }
+        .bet button.active {
+            background-color: #FFD700;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +156,19 @@
     <button id="spinAgain">Крутить ещё</button>
     <div class="timer" id="timer"></div>
 
+    <!-- Баланс -->
+    <div class="balance" id="balance">Баланс: 10 монет</div>
+
+    <!-- Ставки -->
+    <div class="bet">
+        <p>Ставка: <span id="currentBet">1</span> монета</p>
+        <button onclick="changeBet(1)">1x</button>
+        <button onclick="changeBet(2)">2x</button>
+        <button onclick="changeBet(3)">3x</button>
+        <button onclick="changeBet(5)">5x</button>
+        <button onclick="changeBet(10)">10x</button>
+    </div>
+
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
@@ -123,6 +178,8 @@
         const result = document.getElementById("result");
         const spinAgainButton = document.getElementById("spinAgain");
         const timerDisplay = document.getElementById("timer");
+        const balanceDisplay = document.getElementById("balance");
+        const currentBetDisplay = document.getElementById("currentBet");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
@@ -146,44 +203,37 @@
 
         let isSpinning = false;
         let countdown = 0;
+        let balance = 10; // Начальный баланс
+        let currentBet = 1; // Текущая ставка
 
-        function getRandomPrize() {
-            const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0);
-            let random = Math.random() * totalProbability;
-
-            for (const prize of prizes) {
-                if (random < prize.probability) {
-                    return prize;
-                }
-                random -= prize.probability;
-            }
+        // Обновление баланса
+        function updateBalance() {
+            balanceDisplay.innerText = `Баланс: ${balance} монет`;
         }
 
-        function startCountdown() {
-            countdown = 3;
-            timerDisplay.innerText = `Следующая попытка через: ${countdown} сек.`;
-            const interval = setInterval(() => {
-                countdown--;
-                timerDisplay.innerText = `Следующая попытка через: ${countdown} сек.`;
-                if (countdown <= 0) {
-                    clearInterval(interval);
-                    timerDisplay.innerText = "";
-                    spinAgainButton.disabled = false;
-                }
-            }, 1000);
+        // Изменение ставки
+        function changeBet(multiplier) {
+            currentBet = multiplier;
+            currentBetDisplay.innerText = currentBet;
+            document.querySelectorAll(".bet button").forEach(button => {
+                button.classList.remove("active");
+            });
+            event.target.classList.add("active");
         }
 
+        // Логика вращения
         function spinWheel() {
-            if (isSpinning) return;
+            if (isSpinning || balance < currentBet) return;
             isSpinning = true;
+            balance -= currentBet; // Снимаем ставку
+            updateBalance();
             spinAgainButton.style.display = "none";
             spinSound.play();
 
             const prize = getRandomPrize();
-            const targetDegree = (360 - (prizes.indexOf(prize) * 24)) + 12; // Центр сектора
-            const randomSpin = 3600 + targetDegree; // Добавляем полные обороты
+            const targetDegree = (360 - (prizes.indexOf(prize) * 24)) + 12;
+            const randomSpin = 3600 + targetDegree;
 
-            // Сбрасываем transform перед каждым вращением
             wheel.style.transition = "none";
             wheel.style.transform = "rotate(0deg)";
             setTimeout(() => {
@@ -201,11 +251,7 @@
             }, 3000);
         }
 
-        // Обработчик клика на колесо
-        wheel.addEventListener("click", spinWheel);
-
-        // Обработчик клика на кнопку "Крутить ещё"
-        spinAgainButton.addEventListener("click", spinWheel);
+        // Остальная логика...
     </script>
 </body>
 </html>
