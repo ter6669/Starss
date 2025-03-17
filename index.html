@@ -19,58 +19,44 @@
             color: white;
             overflow: hidden;
         }
-        .wheel-container {
+        .tunnel {
             position: relative;
             width: 400px;
-            height: 400px;
+            height: 100px;
             margin-bottom: 20px;
+            overflow: hidden;
         }
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(
-                #555 0% 4.76%, #555 4.76% 9.52%,
-                #555 9.52% 14.28%, #555 14.28% 19.04%,
-                #555 19.04% 23.8%, #555 23.8% 28.56%,
-                #555 28.56% 33.32%, #555 33.32% 38.08%,
-                #555 38.08% 42.84%, #555 42.84% 47.6%,
-                #555 47.6% 52.36%, #555 52.36% 57.12%,
-                #555 57.12% 61.88%, #555 61.88% 66.64%,
-                #555 66.64% 71.4%, #555 71.4% 76.16%,
-                #555 76.16% 80.92%, #555 80.92% 85.68%,
-                #555 85.68% 90.44%, #555 90.44% 95.2%,
-                #FFD700 95.2% 100%
-            );
-            position: relative;
-            cursor: pointer;
-            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
-            border: 8px solid black; /* Черная рамка вокруг колеса */
-        }
-        .wheel::after {
-            content: "";
+        .squares {
+            display: flex;
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            background: black;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            left: 0;
+            top: 0;
+            transition: left 0.1s linear;
+        }
+        .square {
+            width: 100px;
+            height: 100px;
+            background-color: black;
+            border: 2px solid gold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: gold;
+            margin-right: 10px;
         }
         .arrow {
             width: 0;
             height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-top: 50px solid #FFD700;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid gold;
             position: absolute;
-            top: -30px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
             z-index: 2;
-            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
         }
         .result {
             margin-top: 20px;
@@ -83,189 +69,123 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         #spinButton {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            margin-top: 20px;
             padding: 15px 30px;
             font-size: 20px;
             font-weight: bold;
             background-color: #FF6347;
             color: white;
             border: none;
-            border-radius: 50%;
+            border-radius: 5px;
             cursor: pointer;
-            z-index: 3;
             transition: background-color 0.3s, transform 0.2s;
         }
         #spinButton:hover {
             background-color: #FF4500;
-            transform: translate(-50%, -50%) scale(1.1);
+            transform: scale(1.1);
         }
         #spinButton:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
-        .balance {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        .bet {
-            position: fixed;
-            bottom: 80px;
-            left: 20px;
-            font-size: 16px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        .bet button {
-            margin: 5px;
-            padding: 5px 10px;
-            font-size: 14px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .bet button:hover {
-            background-color: #005bb5;
-        }
-        .bet button.active {
-            background-color: #FFD700;
-            color: black;
-        }
     </style>
 </head>
 <body>
-    <div class="result" id="result"></div>
-    <div class="wheel-container">
+    <div class="tunnel">
+        <div class="squares" id="squares">
+            <!-- 20 квадратов с цифрой 1 и 1 квадрат с цифрой 10 -->
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">1</div>
+            <div class="square">10</div>
+        </div>
         <div class="arrow"></div>
-        <div class="wheel" id="wheel"></div>
-        <button id="spinButton">GO</button>
     </div>
-
-    <!-- Баланс -->
-    <div class="balance" id="balance">Баланс: 100 монет</div>
-
-    <!-- Ставки -->
-    <div class="bet">
-        <p>Ставка: <span id="currentBet">1</span>x</p>
-        <button onclick="changeBet(1)">1x</button>
-        <button onclick="changeBet(2)">2x</button>
-        <button onclick="changeBet(3)">3x</button>
-        <button onclick="changeBet(5)">5x</button>
-        <button onclick="changeBet(10)">10x</button>
-    </div>
+    <div class="result" id="result"></div>
+    <button id="spinButton">GO</button>
 
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
 
     <script>
-        const wheel = document.getElementById("wheel");
+        const squaresContainer = document.getElementById("squares");
         const result = document.getElementById("result");
         const spinButton = document.getElementById("spinButton");
-        const balanceDisplay = document.getElementById("balance");
-        const currentBetDisplay = document.getElementById("currentBet");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
-        const prizes = [
-            { color: "#555", value: 1 }, // Темно-серый сектор
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#555", value: 1 },
-            { color: "#FFD700", value: 10 } // Золотой сектор
-        ];
+        const squares = Array.from(document.querySelectorAll(".square"));
+        const squareWidth = squares[0].offsetWidth + 10; // Ширина квадрата + отступ
+        const totalSquares = squares.length;
 
         let isSpinning = false;
-        let balance = 100; // Начальный баланс
-        let currentBet = 1; // Текущая ставка
-
-        // Обновление баланса
-        function updateBalance() {
-            balanceDisplay.innerText = `Баланс: ${balance} монет`;
-        }
-
-        // Изменение ставки
-        function changeBet(multiplier) {
-            currentBet = multiplier;
-            currentBetDisplay.innerText = currentBet;
-            document.querySelectorAll(".bet button").forEach(button => {
-                button.classList.remove("active");
-            });
-            event.target.classList.add("active");
-        }
+        let currentPosition = 0;
+        let targetPosition = 0;
 
         // Логика вращения
-        function spinWheel() {
-            if (isSpinning || balance < currentBet) return;
+        function spin() {
+            if (isSpinning) return;
             isSpinning = true;
-            balance -= currentBet; // Снимаем ставку
-            updateBalance();
             spinButton.disabled = true;
             spinSound.play();
 
-            const prize = getRandomPrize();
-            const targetDegree = (360 - (prizes.indexOf(prize) * (360 / prizes.length))) + (360 / prizes.length / 2);
-            const randomSpin = 3600 + targetDegree;
-
-            wheel.style.transition = "none";
-            wheel.style.transform = "rotate(0deg)";
-            setTimeout(() => {
-                wheel.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)";
-                wheel.style.transform = `rotate(${randomSpin}deg)`;
+            // Быстрое перемещение
+            const fastSpin = setInterval(() => {
+                currentPosition -= squareWidth;
+                if (currentPosition <= -squareWidth * totalSquares) {
+                    currentPosition = 0;
+                }
+                squaresContainer.style.left = `${currentPosition}px`;
             }, 10);
 
+            // Медленная остановка
             setTimeout(() => {
-                winSound.play();
-                const winAmount = prize.value * currentBet;
-                balance += winAmount; // Добавляем выигрыш
-                updateBalance();
-                result.innerText = `Вы выиграли ${winAmount} монет! 🎉`;
-                spinButton.disabled = false;
-                isSpinning = false;
-            }, 3000);
-        }
+                clearInterval(fastSpin);
 
-        // Получение случайного приза
-        function getRandomPrize() {
-            const totalProbability = prizes.length;
-            const randomIndex = Math.floor(Math.random() * totalProbability);
-            return prizes[randomIndex];
+                // Выбор случайного квадрата
+                const randomIndex = Math.floor(Math.random() * totalSquares);
+                targetPosition = -randomIndex * squareWidth;
+
+                const slowSpin = setInterval(() => {
+                    if (Math.abs(currentPosition - targetPosition) < 5) {
+                        clearInterval(slowSpin);
+                        currentPosition = targetPosition;
+                        squaresContainer.style.left = `${currentPosition}px`;
+                        isSpinning = false;
+                        spinButton.disabled = false;
+
+                        // Показ результата
+                        const prize = squares[randomIndex].innerText;
+                        result.innerText = `Вы выиграли ${prize} монет! 🎉`;
+                        winSound.play();
+                    } else {
+                        currentPosition += (targetPosition - currentPosition) * 0.1;
+                        squaresContainer.style.left = `${currentPosition}px`;
+                    }
+                }, 30);
+            }, 2000); // Быстрое вращение в течение 2 секунд
         }
 
         // Обработчик клика на кнопку "GO"
-        spinButton.addEventListener("click", spinWheel);
+        spinButton.addEventListener("click", spin);
     </script>
 </body>
 </html>
