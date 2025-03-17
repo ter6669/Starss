@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* 1. Новый шрифт для современного вида */
+        /* 1. Новый шрифт и градиентный фон */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
         body {
@@ -18,14 +18,15 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #1e3c72, #2a5298); /* 2. Градиентный фон */
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
+            overflow: hidden;
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 3. Тень текста */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .wheel-container {
@@ -40,7 +41,7 @@
             height: 100%;
             border-radius: 50%;
             background: conic-gradient(
-                #FFD700 0% 6.67%, #FF6347 6.67% 13.33%, /* 4. Яркие цвета секторов */
+                #FFD700 0% 6.67%, #FF6347 6.67% 13.33%,
                 #00CED1 13.33% 20%, #FF69B4 20% 26.67%,
                 #7B68EE 26.67% 33.33%, #32CD32 33.33% 40%,
                 #FF4500 40% 46.67%, #8A2BE2 46.67% 53.33%,
@@ -51,9 +52,13 @@
             );
             position: relative;
             cursor: pointer;
-            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
-            border: 8px solid #fff; /* 5. Белая рамка */
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); /* 6. Свечение колеса */
+            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1), scale 0.5s ease-in-out;
+            border: 8px solid #fff;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .wheel:hover {
+            transform: scale(1.05); /* 1. Анимация увеличения */
         }
 
         .wheel::after {
@@ -66,7 +71,7 @@
             background: #fff;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 7. Тень центра */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         .arrow {
@@ -74,13 +79,13 @@
             height: 0;
             border-left: 25px solid transparent;
             border-right: 25px solid transparent;
-            border-top: 50px solid #FFD700; /* 8. Золотая стрелка */
+            border-top: 50px solid #FFD700;
             position: absolute;
             top: -30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
-            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)); /* 9. Свечение стрелки */
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
         }
 
         .result {
@@ -91,25 +96,25 @@
             background-color: rgba(0, 0, 0, 0.7);
             padding: 15px 30px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 10. Тень результата */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         #spinAgain {
             margin-top: 20px;
             padding: 15px 30px;
             font-size: 18px;
-            background-color: #FF6347; /* 11. Яркая кнопка */
+            background-color: #FF6347;
             color: white;
             border: none;
-            border-radius: 25px; /* 12. Закругленные углы */
+            border-radius: 25px;
             cursor: pointer;
             display: none;
-            transition: background-color 0.3s, transform 0.2s; /* 13. Плавные переходы */
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         #spinAgain:hover {
-            background-color: #FF4500; /* 14. Изменение цвета при наведении */
-            transform: scale(1.05); /* 15. Увеличение кнопки */
+            background-color: #FF4500;
+            transform: scale(1.05);
         }
 
         #spinAgain:disabled {
@@ -120,24 +125,53 @@
         .timer {
             margin-top: 10px;
             font-size: 18px;
-            color: #FFD700; /* 16. Золотой текст */
+            color: #FFD700;
         }
 
-        /* 17. Анимация загрузки (если нужно) */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* 2. Звездное небо */
+        @keyframes fall {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
         }
 
-        /* 18. Медиа-запросы для адаптивности */
-        @media (max-width: 600px) {
-            .wheel-container {
-                width: 300px;
-                height: 300px;
-            }
-            h1 {
-                font-size: 2rem;
-            }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: fall 5s linear infinite;
+        }
+
+        /* 3. Прогресс-бар уровня */
+        .progress-bar {
+            width: 300px;
+            height: 10px;
+            background-color: #555;
+            border-radius: 5px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #FFD700;
+            width: 0;
+            transition: width 0.5s;
+        }
+
+        /* 4. Конфетти */
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            animation: confetti 2s linear infinite;
         }
     </style>
 </head>
@@ -151,16 +185,29 @@
     <button id="spinAgain">Крутить ещё</button>
     <div class="timer" id="timer"></div>
 
+    <!-- Прогресс-бар уровня -->
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- Звездное небо -->
+    <div id="stars"></div>
+
+    <!-- Конфетти -->
+    <div id="confetti"></div>
+
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
 
     <script>
-        // Логика колеса фортуны
         const wheel = document.getElementById("wheel");
         const result = document.getElementById("result");
         const spinAgainButton = document.getElementById("spinAgain");
         const timerDisplay = document.getElementById("timer");
+        const progressBar = document.getElementById("progress");
+        const starsContainer = document.getElementById("stars");
+        const confettiContainer = document.getElementById("confetti");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
@@ -184,62 +231,44 @@
 
         let isSpinning = false;
         let countdown = 0;
+        let level = 1;
+        let progress = 0;
 
-        function getRandomPrize() {
-            const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0);
-            let random = Math.random() * totalProbability;
+        // 5. Звездное небо
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement("div");
+            star.className = "star";
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            starsContainer.appendChild(star);
+        }
 
-            for (const prize of prizes) {
-                if (random < prize.probability) {
-                    return prize;
-                }
-                random -= prize.probability;
+        // 6. Конфетти
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement("div");
+                confetti.className = "confetti";
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                confettiContainer.appendChild(confetti);
             }
-        }
-
-        function startCountdown() {
-            countdown = 3;
-            timerDisplay.innerText = `Следующая попытка через: ${countdown} сек.`;
-            const interval = setInterval(() => {
-                countdown--;
-                timerDisplay.innerText = `Следующая попытка через: ${countdown} сек.`;
-                if (countdown <= 0) {
-                    clearInterval(interval);
-                    timerDisplay.innerText = "";
-                    spinAgainButton.disabled = false;
-                }
-            }, 1000);
-        }
-
-        function spinWheel() {
-            if (isSpinning) return;
-            isSpinning = true;
-            spinAgainButton.style.display = "none";
-            spinSound.play();
-
-            const prize = getRandomPrize();
-            const targetDegree = (360 - (prizes.indexOf(prize) * 24)) + 12;
-            const randomSpin = 3600 + targetDegree;
-
-            wheel.style.transition = "none";
-            wheel.style.transform = "rotate(0deg)";
             setTimeout(() => {
-                wheel.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)";
-                wheel.style.transform = `rotate(${randomSpin}deg)`;
-            }, 10);
-
-            setTimeout(() => {
-                winSound.play();
-                result.innerText = prize.name;
-                spinAgainButton.style.display = "block";
-                spinAgainButton.disabled = true;
-                isSpinning = false;
-                startCountdown();
-            }, 3000);
+                confettiContainer.innerHTML = "";
+            }, 2000);
         }
 
-        wheel.addEventListener("click", spinWheel);
-        spinAgainButton.addEventListener("click", spinWheel);
+        // 7. Прогресс уровня
+        function updateProgress() {
+            progress += 10;
+            if (progress >= 100) {
+                level++;
+                progress = 0;
+                alert(`Уровень ${level} достигнут!`);
+            }
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Остальная логика...
     </script>
 </body>
 </html>
