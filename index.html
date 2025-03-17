@@ -16,19 +16,14 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
             overflow: hidden;
             position: relative;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
         }
 
-        /* Анимированный фон */
-        @keyframes gradientBackground {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
+        /* Затемнение фона */
         body::before {
             content: '';
             position: absolute;
@@ -36,9 +31,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1e3c72, #2a5298, #4a00e0);
-            background-size: 200% 200%;
-            animation: gradientBackground 10s ease infinite;
+            background: rgba(0, 0, 0, 0.5);
             z-index: -1;
         }
 
@@ -82,11 +75,6 @@
         .square:hover {
             transform: scale(1.1);
             box-shadow: 0 0 20px gold;
-        }
-
-        .square img {
-            width: 60px;
-            height: 60px;
         }
 
         .arrow {
@@ -221,41 +209,6 @@
             font-size: 16px;
             color: white;
         }
-
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-            z-index: 1000;
-        }
-
-        .modal-content {
-            text-align: center;
-        }
-
-        .modal button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background: linear-gradient(135deg, #ff6b6b, #ff9f43);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .modal button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
-        }
     </style>
 </head>
 <body>
@@ -265,29 +218,10 @@
         <div class="sale-timer" id="saleTimer">01:59:59</div>
     </div>
 
-    <!-- Модальное окно для покупки вращений -->
-    <div class="modal" id="buySpinsModal">
-        <div class="modal-content">
-            <h2>Купить вращения</h2>
-            <p>1 звезда = 1 вращение</p>
-            <button onclick="buySpins(1)">Купить 1 вращение</button>
-            <button onclick="buySpins(5)">Купить 5 вращений</button>
-            <button onclick="buySpins(10)">Купить 10 вращений</button>
-            <button onclick="closeModal()">Закрыть</button>
-        </div>
-    </div>
-
     <!-- Колесо -->
     <div class="tunnel">
         <div class="squares" id="squares">
-            <!-- Кружки с иконками -->
-            <div class="square"><img src="coin.png" alt="Монета"></div>
-            <div class="square"><img src="diamond.png" alt="Алмаз"></div>
-            <div class="square"><img src="chest.png" alt="Сундук"></div>
-            <!-- Повторяем для эффекта бесконечности -->
-            <div class="square"><img src="coin.png" alt="Монета"></div>
-            <div class="square"><img src="diamond.png" alt="Алмаз"></div>
-            <div class="square"><img src="chest.png" alt="Сундук"></div>
+            <!-- Кружки с цифрами и смайликом -->
         </div>
         <div class="arrow"></div>
     </div>
@@ -320,7 +254,116 @@
     <audio id="backgroundMusic" src="background.mp3" loop></audio>
 
     <script>
-        // Логика игры (остается без изменений)
+        const squaresContainer = document.getElementById("squares");
+        const result = document.getElementById("result");
+        const spinButton = document.getElementById("spinButton");
+        const balanceDisplay = document.getElementById("balance");
+        const currentBetDisplay = document.getElementById("currentBet");
+        const inviteButton = document.getElementById("inviteButton");
+        const saleIcon = document.getElementById("saleIcon");
+        const saleTimer = document.getElementById("saleTimer");
+        const spinSound = document.getElementById("spinSound");
+        const winSound = document.getElementById("winSound");
+
+        let isSpinning = false;
+        let currentPosition = 0;
+        let targetPosition = 0;
+        let balance = 100;
+        let currentBet = 1;
+
+        // Генерация случайных чисел и смайлика
+        function generateSquares() {
+            const squares = [];
+            for (let i = 0; i < 9; i++) {
+                squares.push(Math.floor(Math.random() * 50) + 1);
+            }
+            squares.push("😩"); // Добавляем смайлик для проигрыша
+            return squares;
+        }
+
+        // Заполнение квадратов
+        function fillSquares() {
+            const squares = generateSquares();
+            squaresContainer.innerHTML = "";
+            squares.forEach(value => {
+                const square = document.createElement("div");
+                square.className = "square";
+                square.textContent = value;
+                squaresContainer.appendChild(square);
+            });
+            // Дублируем для эффекта бесконечности
+            squaresContainer.innerHTML += squaresContainer.innerHTML;
+        }
+
+        // Обновление баланса
+        function updateBalance() {
+            balanceDisplay.innerText = `Баланс: ${balance} монет`;
+        }
+
+        // Изменение ставки
+        function changeBet(multiplier) {
+            currentBet = multiplier;
+            currentBetDisplay.innerText = currentBet;
+            document.querySelectorAll(".bet button").forEach(button => {
+                button.classList.remove("active");
+            });
+            event.target.classList.add("active");
+        }
+
+        // Логика вращения
+        function spin() {
+            if (isSpinning || balance < currentBet) return;
+            isSpinning = true;
+            balance -= currentBet;
+            updateBalance();
+            spinButton.disabled = true;
+            spinSound.play();
+
+            const fastSpin = setInterval(() => {
+                currentPosition -= 130; // Ширина квадрата + отступ
+                if (currentPosition <= -130 * 10) {
+                    currentPosition = 0;
+                }
+                squaresContainer.style.left = `${currentPosition}px`;
+            }, 10);
+
+            setTimeout(() => {
+                clearInterval(fastSpin);
+
+                const randomIndex = Math.floor(Math.random() * 10);
+                targetPosition = -randomIndex * 130;
+
+                const slowSpin = setInterval(() => {
+                    if (Math.abs(currentPosition - targetPosition) < 5) {
+                        clearInterval(slowSpin);
+                        currentPosition = targetPosition;
+                        squaresContainer.style.left = `${currentPosition}px`;
+                        isSpinning = false;
+                        spinButton.disabled = false;
+
+                        const value = squaresContainer.children[randomIndex].textContent;
+                        if (value === "😩") {
+                            result.innerText = "Проигрыш! Ставка обнулена 😩";
+                            currentBet = 1;
+                            currentBetDisplay.innerText = currentBet;
+                        } else {
+                            const prize = parseInt(value) * currentBet;
+                            balance += prize;
+                            updateBalance();
+                            result.innerText = `Вы выиграли ${prize} монет! 🎉`;
+                            winSound.play();
+                        }
+                    } else {
+                        currentPosition += (targetPosition - currentPosition) * 0.1;
+                        squaresContainer.style.left = `${currentPosition}px`;
+                    }
+                }, 30);
+            }, 2000);
+        }
+
+        // Инициализация
+        fillSquares();
+        spinButton.addEventListener("click", spin);
     </script>
 </body>
 </html>
