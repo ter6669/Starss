@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Fortune Spin</title>
+    <title>Колесо Фортуны</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -30,23 +30,17 @@
             height: 100%;
             border-radius: 50%;
             background: conic-gradient(
-                #FFD700 0% 2%, #FF6347 2% 4%, #00CED1 4% 6%,
-                #FF69B4 6% 8%, #7B68EE 8% 10%, #32CD32 10% 12%,
-                #FF4500 12% 14%, #8A2BE2 14% 16%, #00FA9A 16% 18%,
-                #FF8C00 18% 20%, #6A5ACD 20% 22%, #FF1493 22% 24%,
-                #20B2AA 24% 26%, #FFD700 26% 28%, #FF6347 28% 30%,
-                #00CED1 30% 32%, #FF69B4 32% 34%, #7B68EE 34% 36%,
-                #32CD32 36% 38%, #FF4500 38% 40%, #8A2BE2 40% 42%,
-                #00FA9A 42% 44%, #FF8C00 44% 46%, #6A5ACD 46% 48%,
-                #FF1493 48% 50%, #20B2AA 50% 52%, #FFD700 52% 54%,
-                #FF6347 54% 56%, #00CED1 56% 58%, #FF69B4 58% 60%,
-                #7B68EE 60% 62%, #32CD32 62% 64%, #FF4500 64% 66%,
-                #8A2BE2 66% 68%, #00FA9A 68% 70%, #FF8C00 70% 72%,
-                #6A5ACD 72% 74%, #FF1493 74% 76%, #20B2AA 76% 78%,
-                #FFD700 78% 80%, #FF6347 80% 82%, #00CED1 82% 84%,
-                #FF69B4 84% 86%, #7B68EE 86% 88%, #32CD32 88% 90%,
-                #FF4500 90% 92%, #8A2BE2 92% 94%, #00FA9A 94% 96%,
-                #FF8C00 96% 98%, #6A5ACD 98% 100%
+                #FF6347 0% 4.76%, #FF6347 4.76% 9.52%,
+                #FF6347 9.52% 14.28%, #FF6347 14.28% 19.04%,
+                #FF6347 19.04% 23.8%, #FF6347 23.8% 28.56%,
+                #FF6347 28.56% 33.32%, #FF6347 33.32% 38.08%,
+                #FF6347 38.08% 42.84%, #FF6347 42.84% 47.6%,
+                #32CD32 47.6% 52.36%, #32CD32 52.36% 57.12%,
+                #32CD32 57.12% 61.88%, #32CD32 61.88% 66.64%,
+                #32CD32 66.64% 71.4%, #32CD32 71.4% 76.16%,
+                #32CD32 76.16% 80.92%, #32CD32 80.92% 85.68%,
+                #32CD32 85.68% 90.44%, #32CD32 90.44% 95.2%,
+                #FFD700 95.2% 100%
             );
             position: relative;
             cursor: pointer;
@@ -154,21 +148,6 @@
             background-color: #FFD700;
             color: black;
         }
-        .invite {
-            position: fixed;
-            bottom: 140px;
-            left: 20px;
-            font-size: 16px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-        }
-        .invite:hover {
-            background-color: rgba(0, 0, 0, 0.9);
-        }
     </style>
 </head>
 <body>
@@ -180,20 +159,17 @@
     </div>
 
     <!-- Баланс -->
-    <div class="balance" id="balance">Баланс: 10 монет</div>
+    <div class="balance" id="balance">Баланс: 100 монет</div>
 
     <!-- Ставки -->
     <div class="bet">
-        <p>Ставка: <span id="currentBet">1</span> монета</p>
+        <p>Ставка: <span id="currentBet">1</span>x</p>
         <button onclick="changeBet(1)">1x</button>
         <button onclick="changeBet(2)">2x</button>
         <button onclick="changeBet(3)">3x</button>
         <button onclick="changeBet(5)">5x</button>
         <button onclick="changeBet(10)">10x</button>
     </div>
-
-    <!-- Пригласить друга -->
-    <div class="invite" id="inviteButton">Пригласить друга (+5 вращений)</div>
 
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
@@ -205,32 +181,36 @@
         const spinButton = document.getElementById("spinButton");
         const balanceDisplay = document.getElementById("balance");
         const currentBetDisplay = document.getElementById("currentBet");
-        const inviteButton = document.getElementById("inviteButton");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
         const prizes = [
-            { color: "#FFD700", name: "+10 монет! 🎉", value: 10 },
-            { color: "#FF6347", name: "-5 монет! 🔥", value: -5 },
-            { color: "#00CED1", name: "+20 монет! 💎", value: 20 },
-            { color: "#FF69B4", name: "-10 монет! 🌸", value: -10 },
-            { color: "#7B68EE", name: "+15 монет! 🍇", value: 15 },
-            { color: "#32CD32", name: "-3 монеты! 🌿", value: -3 },
-            { color: "#FF4500", name: "+5 монет! 🍊", value: 5 },
-            { color: "#8A2BE2", name: "-7 монет! 🔵", value: -7 },
-            { color: "#00FA9A", name: "+30 монет! 🍃", value: 30 },
-            { color: "#FF8C00", name: "-2 монеты! 🎃", value: -2 },
-            { color: "#6A5ACD", name: "+50x ставка! 🪨", value: "50x" },
-            { color: "#FF1493", name: "+25 монет! 🌺", value: 25 },
-            { color: "#20B2AA", name: "-15 монет! 🌊", value: -15 },
-            { color: "#FFD700", name: "+10 монет! 🎉", value: 10 },
-            { color: "#FF6347", name: "-5 монет! 🔥", value: -5 }
+            { color: "#FF6347", value: 0 }, // Проигрыш
+            { color: "#FF6347", value: 0 },
+            { color: "#FF6347", value: 0 },
+            { color: "#FF6347", value: 0 },
+            { color: "#FF6347", value: 0 },
+            { color: "#FF6347", value: 0 },
+            { color: "#FF6347", value: 0 },
+            { color: "#FF6347", value: 0 },
+            { color: "#FF6347", value: 0 },
+            { color: "#FF6347", value: 0 },
+            { color: "#32CD32", value: 2 }, // Выигрыш x2
+            { color: "#32CD32", value: 2 },
+            { color: "#32CD32", value: 2 },
+            { color: "#32CD32", value: 2 },
+            { color: "#32CD32", value: 2 },
+            { color: "#32CD32", value: 2 },
+            { color: "#32CD32", value: 2 },
+            { color: "#32CD32", value: 2 },
+            { color: "#32CD32", value: 2 },
+            { color: "#32CD32", value: 2 },
+            { color: "#FFD700", value: 10 } // Супер-выигрыш x10
         ];
 
         let isSpinning = false;
-        let balance = 10; // Начальный баланс
+        let balance = 100; // Начальный баланс
         let currentBet = 1; // Текущая ставка
-        let spinsLeft = 0; // Оставшиеся вращения
 
         // Обновление баланса
         function updateBalance() {
@@ -257,7 +237,7 @@
             spinSound.play();
 
             const prize = getRandomPrize();
-            const targetDegree = (360 - (prizes.indexOf(prize) * 24)) + 12;
+            const targetDegree = (360 - (prizes.indexOf(prize) * (360 / prizes.length)) + (360 / prizes.length / 2);
             const randomSpin = 3600 + targetDegree;
 
             wheel.style.transition = "none";
@@ -269,14 +249,10 @@
 
             setTimeout(() => {
                 winSound.play();
-                if (prize.value === "50x") {
-                    balance += currentBet * 50; // Супер выигрыш
-                    result.innerText = `Супер выигрыш! +${currentBet * 50} монет!`;
-                } else {
-                    balance += prize.value; // Обычный выигрыш
-                    result.innerText = prize.name;
-                }
+                const winAmount = prize.value * currentBet;
+                balance += winAmount; // Добавляем выигрыш
                 updateBalance();
+                result.innerText = winAmount === 0 ? "Проигрыш! 😢" : `Вы выиграли ${winAmount} монет! 🎉`;
                 spinButton.disabled = false;
                 isSpinning = false;
             }, 3000);
@@ -288,12 +264,6 @@
             const randomIndex = Math.floor(Math.random() * totalProbability);
             return prizes[randomIndex];
         }
-
-        // Пригласить друга
-        inviteButton.addEventListener("click", () => {
-            spinsLeft += 5;
-            alert("Вы получили +5 вращений за приглашение друга!");
-        });
 
         // Обработчик клика на кнопку "GO"
         spinButton.addEventListener("click", spinWheel);
