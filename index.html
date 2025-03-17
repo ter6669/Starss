@@ -26,7 +26,6 @@
             position: relative;
             width: 400px;
             height: 400px;
-            margin-bottom: 50px; /* Отступ для подставки */
         }
         .wheel {
             width: 100%;
@@ -34,24 +33,25 @@
             border-radius: 50%;
             background: conic-gradient(
                 #FFD700 0% 6.67%, /* Золотой сектор */
-                red 6.67% 13.33%,
-                orange 13.33% 20%,
-                yellow 20% 26.67%,
-                green 26.67% 33.33%,
-                blue 33.33% 40%,
-                purple 40% 46.67%,
-                pink 46.67% 53.33%,
-                cyan 53.33% 60%,
-                lime 60% 66.67%,
-                teal 66.67% 73.33%,
-                navy 73.33% 80%,
-                maroon 80% 86.67%,
-                olive 86.67% 93.33%,
-                gray 93.33% 100%
+                #555 6.67% 13.33%, /* Темно-серый */
+                #555 13.33% 20%,
+                #555 20% 26.67%,
+                #555 26.67% 33.33%,
+                #555 33.33% 40%,
+                #555 40% 46.67%,
+                #555 46.67% 53.33%,
+                #555 53.33% 60%,
+                #555 60% 66.67%,
+                #555 66.67% 73.33%,
+                #555 73.33% 80%,
+                #555 80% 86.67%,
+                #555 86.67% 93.33%,
+                #555 93.33% 100%
             );
             position: relative;
             cursor: pointer;
             transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            border: 5px solid black; /* Черная рамка вокруг колеса */
         }
         .wheel::after {
             content: "";
@@ -75,29 +75,6 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
-        }
-        .stand {
-            width: 300px;
-            height: 20px;
-            background-color: #555;
-            border-radius: 10px;
-            position: relative;
-            margin-top: -30px; /* Поднимаем подставку ближе к колесу */
-        }
-        .stand::before, .stand::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 100px;
-            background-color: #555;
-            top: -100px;
-            border-radius: 10px;
-        }
-        .stand::before {
-            left: 20%;
-        }
-        .stand::after {
-            right: 20%;
         }
         .result {
             margin-top: 20px;
@@ -139,7 +116,6 @@
         <div class="arrow"></div>
         <div class="wheel" id="wheel"></div>
     </div>
-    <div class="stand"></div> <!-- Подставка под колесо -->
     <div class="result" id="result"></div>
     <button id="spinAgain">Крутить ещё</button>
     <div class="timer" id="timer"></div>
@@ -158,20 +134,20 @@
 
         const prizes = [
             { color: "#FFD700", name: "Золотой приз! 🎉", probability: 1 }, // 1% вероятность
-            { color: "red", name: "Красный приз!", probability: 7 },
-            { color: "orange", name: "Оранжевый приз!", probability: 7 },
-            { color: "yellow", name: "Жёлтый приз!", probability: 7 },
-            { color: "green", name: "Зелёный приз!", probability: 7 },
-            { color: "blue", name: "Синий приз!", probability: 7 },
-            { color: "purple", name: "Фиолетовый приз!", probability: 7 },
-            { color: "pink", name: "Розовый приз!", probability: 7 },
-            { color: "cyan", name: "Голубой приз!", probability: 7 },
-            { color: "lime", name: "Лаймовый приз!", probability: 7 },
-            { color: "teal", name: "Бирюзовый приз!", probability: 7 },
-            { color: "navy", name: "Тёмно-синий приз!", probability: 7 },
-            { color: "maroon", name: "Бордовый приз!", probability: 7 },
-            { color: "olive", name: "Оливковый приз!", probability: 7 },
-            { color: "gray", name: "Серый приз!", probability: 7 }
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 },
+            { color: "#555", name: "Темно-серый приз!", probability: 7 }
         ];
 
         let isSpinning = false;
@@ -210,7 +186,7 @@
             spinSound.play();
 
             const prize = getRandomPrize(); // Выбираем приз
-            const targetDegree = (360 - (prizes.indexOf(prize) * 24) + 12; // Центр сектора
+            const targetDegree = (360 - (prizes.indexOf(prize) * 24) + 12); // Центр сектора
             const randomSpin = 3600 + targetDegree; // Добавляем полные обороты
 
             // Сбрасываем transform перед каждым вращением
