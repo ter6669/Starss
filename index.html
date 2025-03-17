@@ -25,6 +25,8 @@
             height: 100px;
             margin-bottom: 20px;
             overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
         .squares {
             display: flex;
@@ -45,6 +47,12 @@
             font-weight: bold;
             color: gold;
             margin-right: 10px;
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .square:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px gold;
         }
         .arrow {
             width: 0;
@@ -53,7 +61,7 @@
             border-right: 20px solid transparent;
             border-top: 40px solid gold;
             position: absolute;
-            top: -50px; /* Поднимаем стрелку выше */
+            top: -50px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -100,9 +108,116 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
+        .bet {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            font-size: 16px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .bet button {
+            margin: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .bet button:hover {
+            background-color: #005bb5;
+        }
+        .bet button.active {
+            background-color: #FFD700;
+            color: black;
+        }
+        .invite {
+            position: fixed;
+            bottom: 140px;
+            left: 20px;
+            font-size: 16px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+        .invite:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .sale-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFD700;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+        .sale-timer {
+            font-size: 16px;
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            z-index: 1000;
+        }
+        .modal-content {
+            text-align: center;
+        }
+        .modal button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal button:hover {
+            background-color: #FF4500;
+        }
     </style>
 </head>
 <body>
+    <!-- Иконка SALE с таймером -->
+    <div class="sale-icon" id="saleIcon">
+        SALE
+        <div class="sale-timer" id="saleTimer">01:59:59</div>
+    </div>
+
+    <!-- Модальное окно для покупки вращений -->
+    <div class="modal" id="buySpinsModal">
+        <div class="modal-content">
+            <h2>Купить вращения</h2>
+            <p>1 звезда = 1 вращение</p>
+            <button onclick="buySpins(1)">Купить 1 вращение</button>
+            <button onclick="buySpins(5)">Купить 5 вращений</button>
+            <button onclick="buySpins(10)">Купить 10 вращений</button>
+            <button onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>
+
     <div class="tunnel">
         <div class="squares" id="squares">
             <!-- 20 квадратов с цифрой 1 и 1 квадрат с цифрой 10 -->
@@ -158,6 +273,19 @@
     <!-- Баланс -->
     <div class="balance" id="balance">Баланс: 100 монет</div>
 
+    <!-- Ставки -->
+    <div class="bet">
+        <p>Ставка: <span id="currentBet">1</span>x</p>
+        <button onclick="changeBet(1)">1x</button>
+        <button onclick="changeBet(2)">2x</button>
+        <button onclick="changeBet(3)">3x</button>
+        <button onclick="changeBet(5)">5x</button>
+        <button onclick="changeBet(10)">10x</button>
+    </div>
+
+    <!-- Пригласить друга -->
+    <div class="invite" id="inviteButton">Пригласить друга (+5 вращений)</div>
+
     <!-- Аудио -->
     <audio id="spinSound" src="spin.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
@@ -167,6 +295,11 @@
         const result = document.getElementById("result");
         const spinButton = document.getElementById("spinButton");
         const balanceDisplay = document.getElementById("balance");
+        const currentBetDisplay = document.getElementById("currentBet");
+        const inviteButton = document.getElementById("inviteButton");
+        const saleIcon = document.getElementById("saleIcon");
+        const saleTimer = document.getElementById("saleTimer");
+        const buySpinsModal = document.getElementById("buySpinsModal");
         const spinSound = document.getElementById("spinSound");
         const winSound = document.getElementById("winSound");
 
@@ -178,17 +311,28 @@
         let currentPosition = 0;
         let targetPosition = 0;
         let balance = 100; // Начальный баланс
+        let currentBet = 1; // Текущая ставка
 
         // Обновление баланса
         function updateBalance() {
             balanceDisplay.innerText = `Баланс: ${balance} монет`;
         }
 
+        // Изменение ставки
+        function changeBet(multiplier) {
+            currentBet = multiplier;
+            currentBetDisplay.innerText = currentBet;
+            document.querySelectorAll(".bet button").forEach(button => {
+                button.classList.remove("active");
+            });
+            event.target.classList.add("active");
+        }
+
         // Логика вращения
         function spin() {
-            if (isSpinning || balance < 1) return;
+            if (isSpinning || balance < currentBet) return;
             isSpinning = true;
-            balance -= 1; // Снимаем 1 монету за вращение
+            balance -= currentBet; // Снимаем ставку
             updateBalance();
             spinButton.disabled = true;
             spinSound.play();
@@ -219,7 +363,7 @@
                         spinButton.disabled = false;
 
                         // Показ результата
-                        const prize = parseInt(squares[randomIndex].innerText);
+                        const prize = parseInt(squares[randomIndex].innerText) * currentBet;
                         balance += prize; // Добавляем выигрыш
                         updateBalance();
                         result.innerText = `Вы выиграли ${prize} монет! 🎉`;
