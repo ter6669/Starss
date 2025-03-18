@@ -31,6 +31,7 @@
             border-radius: 50%;
             background: #1a1a1a; /* Темно-темно серый фон */
             margin-top: 50px;
+            z-index: 1; /* Колесо под стрелкой */
         }
 
         /* Белые линии для разделения секторов */
@@ -55,18 +56,19 @@
         .wheel .line:nth-child(4) { transform: rotate(270deg); }
         .wheel .line:nth-child(5) { transform: rotate(315deg); }
 
-        /* Красная стрелка как указатель выигрыша */
+        /* Красная стрелка как указатель */
         .pointer {
             position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid red;
-            top: -50px;
+            width: 40px; /* Ширина стрелки */
+            height: 40px; /* Высота стрелки */
+            background: red;
+            border-radius: 50%; /* Делаем круглую форму */
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* Острый конец внизу */
+            top: -60px; /* Позиционируем выше колеса */
             left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
+            transform: translateX(-50%) rotate(180deg); /* Центрируем и поворачиваем */
+            z-index: 2; /* Стрелка поверх колеса */
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7); /* Тень для эффекта */
         }
 
         /* Кнопка "Вывод" */
@@ -180,6 +182,12 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
             z-index: 1000;
             text-align: center;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
