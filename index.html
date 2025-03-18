@@ -55,6 +55,19 @@
         .wheel .line:nth-child(4) { transform: rotate(270deg); }
         .wheel .line:nth-child(5) { transform: rotate(315deg); }
 
+        /* Красная полукруглая стрелка */
+        .arrow {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: red;
+            clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
         /* Кнопки */
         .buttons {
             display: flex;
@@ -121,6 +134,48 @@
             align-items: center;
             gap: 10px;
         }
+
+        /* Модальное окно для подарка */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .modal-content {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .modal button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .modal button:hover {
+            background: #ff4500;
+        }
+
+        /* Таймер */
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -147,22 +202,40 @@
     </div>
 
     <!-- Колесо фортуны -->
-    <div class="wheel" id="wheel">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
+    <div class="wheel-container">
+        <div class="arrow"></div>
+        <div class="wheel" id="wheel">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
     </div>
 
     <!-- Кнопка "Вращать" -->
     <button id="spinButton">Вращать</button>
 
+    <!-- Модальное окно для подарка -->
+    <div class="modal" id="giftModal">
+        <div class="modal-content">
+            Получи 1 вращение за вход
+            <div class="timer" id="timer">24:00:00</div>
+        </div>
+        <button id="claimButton">Получить</button>
+    </div>
+
     <script>
         const wheel = document.getElementById("wheel");
         const spinButton = document.getElementById("spinButton");
+        const giftModal = document.getElementById("giftModal");
+        const claimButton = document.getElementById("claimButton");
+        const timer = document.getElementById("timer");
 
         let isSpinning = false;
+        let spins = 0;
+        let timerInterval;
+        let lastClaimTime = localStorage.getItem("lastClaimTime");
 
         // Функция для вращения колеса
         function spinWheel() {
@@ -170,7 +243,7 @@
             isSpinning = true;
 
             const randomRotation = Math.floor(Math.random() * 360) + 1440; // Случайное вращение
-            wheel.style.transition = "transform 3s ease-out";
+            wheel.style.transition = "transform 6s ease-out";
             wheel.style.transform = `rotate(${randomRotation}deg)`;
 
             setTimeout(() => {
@@ -178,11 +251,60 @@
                 wheel.style.transition = "none";
                 const actualRotation = randomRotation % 360;
                 wheel.style.transform = `rotate(${actualRotation}deg)`;
-            }, 3000);
+                alert(`Выигрышный сектор: ${Math.floor(actualRotation / 45) + 1}`);
+            }, 6000);
         }
 
         // Обработчик клика на кнопку "Вращать"
         spinButton.addEventListener("click", spinWheel);
+
+        // Обработчик клика на кнопку "Подарок"
+        document.getElementById("prizesButton").addEventListener("click", () => {
+            if (canClaimGift()) {
+                giftModal.style.display = "block";
+            } else {
+                alert("Вы уже получили подарок сегодня. Попробуйте завтра.");
+            }
+        });
+
+        // Обработчик клика на кнопку "Получить"
+        claimButton.addEventListener("click", () => {
+            spins += 1;
+            localStorage.setItem("lastClaimTime", Date.now());
+            giftModal.style.display = "none";
+            alert("Вы получили 1 вращение!");
+            startTimer();
+        });
+
+        // Проверка, можно ли получить подарок
+        function canClaimGift() {
+            if (!lastClaimTime) return true;
+            const currentTime = Date.now();
+            const timeDiff = currentTime - lastClaimTime;
+            return timeDiff >= 24 * 60 * 60 * 1000; // 24 часа
+        }
+
+        // Таймер
+        function startTimer() {
+            let timeLeft = 24 * 60 * 60; // 24 часа в секундах
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timer.innerText = "00:00:00";
+                    return;
+                }
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                timer.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Запуск таймера при загрузке страницы
+        if (lastClaimTime) {
+            startTimer();
+        }
     </script>
 </body>
 </html>
