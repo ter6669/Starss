@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Колесо Удачи</title>
+    <title>Колесо Фортуны</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* Основные стили */
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
             padding: 0;
             margin: 0;
@@ -35,335 +35,128 @@
             z-index: -1;
         }
 
-        /* Колесо */
-        .tunnel {
+        /* Колесо фортуны */
+        .wheel {
             position: relative;
-            width: 500px;
-            height: 120px;
-            margin-bottom: 20px;
+            width: 300px;
+            height: 300px;
+            border: 10px solid black;
+            border-radius: 50%;
             overflow: hidden;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .squares {
             display: flex;
-            position: absolute;
-            left: 0;
-            top: 0;
-            transition: left 0.1s linear;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
         }
 
-        .square {
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, #ff9f43, #ff6b6b);
-            border: 3px solid gold;
+        .wheel::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: gold;
+            border: 4px solid black;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .sector {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            clip-path: polygon(100% 0, 50% 100%, 0 0);
+            transform-origin: bottom right;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             font-weight: bold;
             color: white;
-            margin-right: 10px;
-            border-radius: 50%;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .square:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px gold;
-        }
-
-        .arrow {
-            width: 0;
-            height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-top: 50px solid gold;
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            filter: drop-shadow(0 0 10px gold);
-        }
-
-        /* Результат */
-        .result {
-            margin-top: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 15px 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-            animation: fadeIn 1s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Кнопка GO */
-        #spinButton {
-            margin-top: 20px;
-            padding: 15px 40px;
-            font-size: 24px;
-            font-weight: bold;
             background: linear-gradient(135deg, #ff6b6b, #ff9f43);
+        }
+
+        /* Кнопки */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
             color: white;
+            background: linear-gradient(135deg, #007bff, #00bfff);
             border: none;
             border-radius: 50px;
             cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
         }
 
-        #spinButton:hover {
+        .button:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(255, 107, 107, 0.9);
+            box-shadow: 0 0 25px rgba(0, 123, 255, 0.9);
         }
 
-        #spinButton:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        /* Баланс и ставки */
+        /* Баланс */
         .balance {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .bet {
-            position: fixed;
-            bottom: 80px;
-            left: 20px;
-            font-size: 16px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .bet button {
-            margin: 5px;
-            padding: 5px 10px;
-            font-size: 14px;
-            background: linear-gradient(135deg, #007bff, #00bfff);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .bet button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
-        }
-
-        .bet button.active {
-            background: linear-gradient(135deg, #ffd700, #ffa500);
-            color: black;
-        }
-
-        /* Иконка SALE */
-        .sale-icon {
-            position: fixed;
-            top: 20px;
-            left: 20px;
             font-size: 24px;
             font-weight: bold;
-            color: #ffd700;
-            background-color: rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.7);
             padding: 10px 20px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-            cursor: pointer;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .sale-timer {
-            font-size: 16px;
-            color: white;
         }
     </style>
 </head>
 <body>
-    <!-- Иконка SALE с таймером -->
-    <div class="sale-icon" id="saleIcon">
-        SALE
-        <div class="sale-timer" id="saleTimer">01:59:59</div>
-    </div>
-
-    <!-- Колесо -->
-    <div class="tunnel">
-        <div class="squares" id="squares">
-            <!-- Кружки с цифрами и смайликом -->
-        </div>
-        <div class="arrow"></div>
-    </div>
-
-    <!-- Результат -->
-    <div class="result" id="result"></div>
-
-    <!-- Кнопка GO -->
-    <button id="spinButton">GO</button>
-
     <!-- Баланс -->
-    <div class="balance" id="balance">Баланс: 100 монет</div>
+    <div class="balance" id="balance">БАЛАНС: 10</div>
 
-    <!-- Ставки -->
-    <div class="bet">
-        <p>Ставка: <span id="currentBet">1</span>x</p>
-        <button onclick="changeBet(1)">1x</button>
-        <button onclick="changeBet(2)">2x</button>
-        <button onclick="changeBet(3)">3x</button>
-        <button onclick="changeBet(5)">5x</button>
-        <button onclick="changeBet(10)">10x</button>
+    <!-- Кнопки -->
+    <div class="buttons">
+        <button class="button" id="spinButton">Вращения</button>
+        <button class="button" id="prizesButton">Призы</button>
+        <button class="button" id="withdrawButton">Вывод</button>
     </div>
 
-    <!-- Пригласить друга -->
-    <div class="invite" id="inviteButton">Пригласить друга (+5 вращений)</div>
-
-    <!-- Аудио -->
-    <audio id="spinSound" src="spin.mp3"></audio>
-    <audio id="winSound" src="win.mp3"></audio>
-    <audio id="backgroundMusic" src="background.mp3" loop></audio>
+    <!-- Колесо фортуны -->
+    <div class="wheel" id="wheel">
+        <!-- Секторы будут добавлены через JavaScript -->
+    </div>
 
     <script>
-        const squaresContainer = document.getElementById("squares");
-        const result = document.getElementById("result");
-        const spinButton = document.getElementById("spinButton");
+        const wheel = document.getElementById("wheel");
         const balanceDisplay = document.getElementById("balance");
-        const currentBetDisplay = document.getElementById("currentBet");
-        const inviteButton = document.getElementById("inviteButton");
-        const saleIcon = document.getElementById("saleIcon");
-        const saleTimer = document.getElementById("saleTimer");
-        const spinSound = document.getElementById("spinSound");
-        const winSound = document.getElementById("winSound");
 
-        let isSpinning = false;
-        let currentPosition = 0;
-        let targetPosition = 0;
-        let balance = 100;
-        let currentBet = 1;
+        let balance = 10;
 
-        // Генерация случайных чисел и смайлика
-        function generateSquares() {
-            const squares = [];
-            for (let i = 0; i < 9; i++) {
-                squares.push(Math.floor(Math.random() * 50) + 1);
+        // Создание секторов
+        function createSectors() {
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+            numbers.sort(() => Math.random() - 0.5); // Рандомное перемешивание
+
+            for (let i = 0; i < 8; i++) {
+                const sector = document.createElement("div");
+                sector.className = "sector";
+                sector.style.transform = `rotate(${i * 45}deg)`;
+                sector.textContent = numbers[i];
+                wheel.appendChild(sector);
             }
-            squares.push("😩"); // Добавляем смайлик для проигрыша
-            return squares;
-        }
-
-        // Заполнение квадратов
-        function fillSquares() {
-            const squares = generateSquares();
-            squaresContainer.innerHTML = "";
-            squares.forEach(value => {
-                const square = document.createElement("div");
-                square.className = "square";
-                square.textContent = value;
-                squaresContainer.appendChild(square);
-            });
-            // Дублируем для эффекта бесконечности
-            squaresContainer.innerHTML += squaresContainer.innerHTML;
         }
 
         // Обновление баланса
         function updateBalance() {
-            balanceDisplay.innerText = `Баланс: ${balance} монет`;
-        }
-
-        // Изменение ставки
-        function changeBet(multiplier) {
-            currentBet = multiplier;
-            currentBetDisplay.innerText = currentBet;
-            document.querySelectorAll(".bet button").forEach(button => {
-                button.classList.remove("active");
-            });
-            event.target.classList.add("active");
-        }
-
-        // Логика вращения
-        function spin() {
-            if (isSpinning || balance < currentBet) return;
-            isSpinning = true;
-            balance -= currentBet;
-            updateBalance();
-            spinButton.disabled = true;
-            spinSound.play();
-
-            const fastSpin = setInterval(() => {
-                currentPosition -= 130; // Ширина квадрата + отступ
-                if (currentPosition <= -130 * 10) {
-                    currentPosition = 0;
-                }
-                squaresContainer.style.left = `${currentPosition}px`;
-            }, 10);
-
-            setTimeout(() => {
-                clearInterval(fastSpin);
-
-                const randomIndex = Math.floor(Math.random() * 10);
-                targetPosition = -randomIndex * 130;
-
-                const slowSpin = setInterval(() => {
-                    if (Math.abs(currentPosition - targetPosition) < 5) {
-                        clearInterval(slowSpin);
-                        currentPosition = targetPosition;
-                        squaresContainer.style.left = `${currentPosition}px`;
-                        isSpinning = false;
-                        spinButton.disabled = false;
-
-                        const value = squaresContainer.children[randomIndex].textContent;
-                        if (value === "😩") {
-                            result.innerText = "Проигрыш! Ставка обнулена 😩";
-                            currentBet = 1;
-                            currentBetDisplay.innerText = currentBet;
-                        } else {
-                            const prize = parseInt(value) * currentBet;
-                            balance += prize;
-                            updateBalance();
-                            result.innerText = `Вы выиграли ${prize} монет! 🎉`;
-                            winSound.play();
-                        }
-                    } else {
-                        currentPosition += (targetPosition - currentPosition) * 0.1;
-                        squaresContainer.style.left = `${currentPosition}px`;
-                    }
-                }, 30);
-            }, 2000);
+            balanceDisplay.innerText = `БАЛАНС: ${balance}`;
         }
 
         // Инициализация
-        fillSquares();
-        spinButton.addEventListener("click", spin);
+        createSectors();
+        updateBalance();
     </script>
 </body>
 </html>
