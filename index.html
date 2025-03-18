@@ -19,8 +19,9 @@
             color: white;
             overflow: hidden;
             position: relative;
-            background: #2c3e50; /* Темно-серый фон */
-            padding-bottom: 100px; /* Отступ для нижней панели */
+            background-image: url('background.jpg'); /* Ваше изображение */
+            background-size: cover; /* Растягиваем изображение на весь экран */
+            background-position: center; /* Центрируем изображение */
         }
 
         /* Колесо фортуны */
@@ -71,33 +72,47 @@
             z-index: 2;
         }
 
-        /* Кнопка "Подарок" */
-        #prizesButton {
-            position: absolute;
-            top: 80px;
-            left: 20px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: bold;
-            background: black;
+        /* Нижняя панель */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px; /* Немного выше */
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000; /* Чтобы панель была поверх других элементов */
+        }
+
+        /* Круглые иконки */
+        .nav-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: #ff6b6b;
+            border-radius: 50%;
             color: white;
-            border: 2px solid white;
-            border-radius: 10px;
+            font-size: 24px;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            animation: pulse 2s infinite;
+            transition: transform 0.3s, background 0.3s;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .nav-icon span {
+            font-size: 12px;
+            margin-top: 5px;
         }
 
-        #prizesButton:hover {
-            animation: none;
-            transform: scale(1.1);
-            background: #333;
+        /* Активная кнопка "Крути" */
+        .nav-icon.active {
+            transform: scale(3);
+            background: #ff4500;
+            z-index: 1001; /* Чтобы была поверх других */
         }
 
         /* Кнопка "Вращать" */
@@ -136,90 +151,6 @@
             align-items: center;
             gap: 10px;
         }
-
-        /* Нижняя панель с кнопками */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #1a1a1a; /* Темный фон */
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-            z-index: 1000; /* Чтобы панель была поверх других элементов */
-        }
-
-        /* Стили для кнопок в нижней панели */
-        .bottom-nav button {
-            background: #ff6b6b;
-            border: none;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 10px 20px;
-            border-radius: 10px;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .bottom-nav button:hover {
-            background: #ff4500;
-            transform: scale(1.1);
-        }
-
-        .bottom-nav button:active {
-            transform: scale(0.9);
-        }
-
-        /* Значок настроек */
-        .settings-icon {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: white;
-            transition: transform 0.2s;
-        }
-
-        .settings-icon:hover {
-            transform: scale(1.1);
-        }
-
-        /* Модальное окно настроек */
-        .settings-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            z-index: 1000;
-            text-align: center;
-            animation: fadeIn 0.5s;
-        }
-
-        .settings-modal button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin: 5px;
-        }
-
-        .settings-modal button:hover {
-            background: #ff4500;
-        }
     </style>
 </head>
 <body>
@@ -227,15 +158,6 @@
     <div class="balance" id="balance">
         <span id="spinCount">10</span>
     </div>
-
-    <!-- Значок настроек -->
-    <div class="settings-icon" id="settingsIcon">⚙️</div>
-
-    <!-- Кнопка "Подарок" -->
-    <button id="prizesButton">
-        🎁
-        <div id="prizesText">Подарок</div>
-    </button>
 
     <!-- Колесо фортуны -->
     <div class="wheel-container">
@@ -252,31 +174,29 @@
     <!-- Кнопка "Вращать" -->
     <button id="spinButton">Вращать</button>
 
-    <!-- Нижняя панель с кнопками -->
+    <!-- Нижняя панель с иконками -->
     <div class="bottom-nav">
-        <button onclick="window.location.href='friends.html'"><span id="friendsText">Друзья</span></button>
-        <button onclick="window.location.href='index.html'">Крути!</button>
-        <button onclick="window.location.href='withdraw.html'"><span id="withdrawText">Вывод</span></button>
-    </div>
-
-    <!-- Модальное окно настроек -->
-    <div class="settings-modal" id="settingsModal">
-        <div class="modal-content">
-            Выберите язык:
+        <div class="nav-icon" id="friendsIcon">
+            🫂
+            <span>Друзья</span>
         </div>
-        <button onclick="changeLanguage('ru')">Русский</button>
-        <button onclick="changeLanguage('en')">English</button>
+        <div class="nav-icon" id="spinIcon">
+            🕹️
+            <span>Крути</span>
+        </div>
+        <div class="nav-icon" id="withdrawIcon">
+            🏦
+            <span>Вывод</span>
+        </div>
     </div>
 
     <script>
         const wheel = document.getElementById("wheel");
         const spinButton = document.getElementById("spinButton");
-        const settingsIcon = document.getElementById("settingsIcon");
-        const settingsModal = document.getElementById("settingsModal");
+        const spinIcon = document.getElementById("spinIcon");
+        const friendsIcon = document.getElementById("friendsIcon");
+        const withdrawIcon = document.getElementById("withdrawIcon");
         const spinCount = document.getElementById("spinCount");
-        const friendsText = document.getElementById("friendsText");
-        const withdrawText = document.getElementById("withdrawText");
-        const prizesText = document.getElementById("prizesText");
 
         let isSpinning = false;
         let spins = 10; // Начальное количество вращений
@@ -318,26 +238,27 @@
         // Обработчик клика на кнопку "Вращать"
         spinButton.addEventListener("click", spinWheel);
 
-        // Обработчик клика на значок настроек
-        settingsIcon.addEventListener("click", () => {
-            settingsModal.style.display = "block";
+        // Обработчик клика на иконку "Крути"
+        spinIcon.addEventListener("click", () => {
+            spinIcon.classList.add("active");
+            friendsIcon.classList.remove("active");
+            withdrawIcon.classList.remove("active");
+            spinButton.style.display = "block"; // Показываем кнопку "Вращать"
         });
 
-        // Функция для смены языка
-        function changeLanguage(lang) {
-            if (lang === 'ru') {
-                spinButton.innerText = "Вращать";
-                friendsText.innerText = "Друзья";
-                withdrawText.innerText = "Вывод";
-                prizesText.innerText = "Подарок";
-            } else if (lang === 'en') {
-                spinButton.innerText = "Spin";
-                friendsText.innerText = "Friends";
-                withdrawText.innerText = "Withdraw";
-                prizesText.innerText = "Gift";
-            }
-            settingsModal.style.display = "none";
-        }
+        // Обработчик клика на иконку "Друзья"
+        friendsIcon.addEventListener("click", () => {
+            spinIcon.classList.remove("active");
+            spinButton.style.display = "none"; // Скрываем кнопку "Вращать"
+            window.location.href = "friends.html"; // Переход на страницу друзей
+        });
+
+        // Обработчик клика на иконку "Вывод"
+        withdrawIcon.addEventListener("click", () => {
+            spinIcon.classList.remove("active");
+            spinButton.style.display = "none"; // Скрываем кнопку "Вращать"
+            window.location.href = "withdraw.html"; // Переход на страницу вывода
+        });
 
         // Инициализация баланса
         updateSpinCount();
