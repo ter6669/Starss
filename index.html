@@ -20,7 +20,7 @@
             overflow: hidden;
             position: relative;
             background: #2c3e50; /* Темно-серый фон */
-            padding-bottom: 70px; /* Отступ для нижней панели */
+            padding-bottom: 100px; /* Отступ для нижней панели */
         }
 
         /* Колесо фортуны */
@@ -72,27 +72,6 @@
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.7); /* Тень для эффекта */
         }
 
-        /* Кнопка "Вывод" */
-        #withdrawButton {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: bold;
-            background: black;
-            color: white;
-            border: 2px solid white;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        #withdrawButton:hover {
-            transform: scale(1.1);
-            background: #333;
-        }
-
         /* Кнопка "Подарок" */
         #prizesButton {
             position: absolute;
@@ -120,17 +99,6 @@
             animation: none;
             transform: scale(1.1);
             background: #333;
-        }
-
-        /* Таймер под кнопкой "Подарок" */
-        #giftTimer {
-            position: absolute;
-            top: 130px; /* Перемещен ниже кнопки "Подарок" */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            color: white;
-            display: none; /* Скрыт по умолчанию */
         }
 
         /* Кнопка "Вращать" */
@@ -246,26 +214,91 @@
         .bottom-nav button:active {
             transform: scale(0.9);
         }
+
+        /* Круглая кнопка "Крути!" */
+        .spin-circle {
+            width: 80px;
+            height: 80px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .spin-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.9);
+        }
+
+        /* Значок настроек */
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .settings-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Модальное окно настроек */
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            z-index: 1000;
+            text-align: center;
+            animation: fadeIn 0.5s;
+        }
+
+        .settings-modal button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+
+        .settings-modal button:hover {
+            background: #ff4500;
+        }
     </style>
 </head>
 <body>
     <!-- Баланс -->
     <div class="balance" id="balance">
-        Вращений: <span id="spinCount">10</span>
+        <span id="spinCount">10</span>
     </div>
 
-    <!-- Кнопка "Вывод" -->
-    <button id="withdrawButton">
-        💰
-        <div>Вывод</div>
-    </button>
+    <!-- Значок настроек -->
+    <div class="settings-icon" id="settingsIcon">⚙️</div>
 
     <!-- Кнопка "Подарок" -->
     <button id="prizesButton">
         🎁
         <div>Подарок</div>
     </button>
-    <div id="giftTimer">24:00:00</div>
 
     <!-- Колесо фортуны -->
     <div class="wheel-container">
@@ -282,36 +315,32 @@
     <!-- Кнопка "Вращать" -->
     <button id="spinButton">Вращать</button>
 
-    <!-- Модальное окно для подарка -->
-    <div class="modal" id="giftModal">
-        <div class="modal-content">
-            Получи 1 вращение за вход
-            <div class="timer" id="timer">24:00:00</div>
-        </div>
-        <button id="claimButton">Получить</button>
-    </div>
-
     <!-- Нижняя панель с кнопками -->
     <div class="bottom-nav">
-        <button onclick="window.location.href='index.html'">Главная</button>
-        <button onclick="window.location.href='profile.html'">Профиль</button>
-        <button onclick="window.location.href='settings.html'">Настройки</button>
-        <button onclick="window.location.href='history.html'">История</button>
+        <button onclick="window.location.href='friends.html'">Друзья</button>
+        <div class="spin-circle" id="spinCircle">Крути!</div>
+        <button onclick="window.location.href='withdraw.html'">Вывод</button>
+    </div>
+
+    <!-- Модальное окно настроек -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="modal-content">
+            Выберите язык:
+        </div>
+        <button onclick="changeLanguage('ru')">Русский</button>
+        <button onclick="changeLanguage('en')">English</button>
     </div>
 
     <script>
         const wheel = document.getElementById("wheel");
         const spinButton = document.getElementById("spinButton");
-        const giftModal = document.getElementById("giftModal");
-        const claimButton = document.getElementById("claimButton");
-        const timer = document.getElementById("timer");
+        const spinCircle = document.getElementById("spinCircle");
+        const settingsIcon = document.getElementById("settingsIcon");
+        const settingsModal = document.getElementById("settingsModal");
         const spinCount = document.getElementById("spinCount");
-        const giftTimer = document.getElementById("giftTimer");
 
         let isSpinning = false;
         let spins = 10; // Начальное количество вращений
-        let timerInterval;
-        let lastClaimTime = localStorage.getItem("lastClaimTime");
 
         // Обновление отображения баланса
         function updateSpinCount() {
@@ -349,58 +378,24 @@
 
         // Обработчик клика на кнопку "Вращать"
         spinButton.addEventListener("click", spinWheel);
+        spinCircle.addEventListener("click", spinWheel);
 
-        // Обработчик клика на кнопку "Подарок"
-        document.getElementById("prizesButton").addEventListener("click", () => {
-            if (canClaimGift()) {
-                giftModal.style.display = "block";
-            } else {
-                alert("Вы уже получили подарок сегодня. Попробуйте завтра.");
+        // Обработчик клика на значок настроек
+        settingsIcon.addEventListener("click", () => {
+            settingsModal.style.display = "block";
+        });
+
+        // Функция для смены языка
+        function changeLanguage(lang) {
+            if (lang === 'ru') {
+                spinButton.innerText = "Вращать";
+                spinCircle.innerText = "Крути!";
+                settingsModal.style.display = "none";
+            } else if (lang === 'en') {
+                spinButton.innerText = "Spin";
+                spinCircle.innerText = "Spin!";
+                settingsModal.style.display = "none";
             }
-        });
-
-        // Обработчик клика на кнопку "Получить"
-        claimButton.addEventListener("click", () => {
-            spins += 1;
-            updateSpinCount();
-            localStorage.setItem("lastClaimTime", Date.now());
-            giftModal.style.display = "none";
-            alert("Вы получили 1 вращение!");
-            startTimer();
-        });
-
-        // Проверка, можно ли получить подарок
-        function canClaimGift() {
-            if (!lastClaimTime) return true;
-            const currentTime = Date.now();
-            const timeDiff = currentTime - lastClaimTime;
-            return timeDiff >= 24 * 60 * 60 * 1000; // 24 часа
-        }
-
-        // Таймер
-        function startTimer() {
-            giftTimer.style.display = "block"; // Показываем таймер
-            let timeLeft = 24 * 60 * 60; // 24 часа в секундах
-            timerInterval = setInterval(() => {
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timer.innerText = "00:00:00";
-                    giftTimer.innerText = "00:00:00";
-                    return;
-                }
-                const hours = Math.floor(timeLeft / 3600);
-                const minutes = Math.floor((timeLeft % 3600) / 60);
-                const seconds = timeLeft % 60;
-                const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                timer.innerText = timeString;
-                giftTimer.innerText = timeString;
-                timeLeft--;
-            }, 1000);
-        }
-
-        // Запуск таймера при загрузке страницы
-        if (lastClaimTime) {
-            startTimer();
         }
 
         // Инициализация баланса
