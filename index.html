@@ -55,15 +55,13 @@
         .wheel .line:nth-child(4) { transform: rotate(270deg); }
         .wheel .line:nth-child(5) { transform: rotate(315deg); }
 
-        /* Стрелка над колесом */
-        .arrow {
+        /* Красная линия как указатель выигрыша */
+        .pointer {
             position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid red;
-            top: -50px;
+            width: 2px;
+            height: 50%;
+            background: red;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -93,7 +91,7 @@
         /* Кнопка "Подарок" */
         #prizesButton {
             position: absolute;
-            top: 70px; /* Отодвинута ниже кнопки "Вывод" */
+            top: 80px; /* Перемещена немного ниже */
             left: 20px;
             padding: 8px 16px;
             font-size: 14px;
@@ -122,7 +120,7 @@
         /* Таймер под кнопкой "Подарок" */
         #giftTimer {
             position: absolute;
-            top: 120px; /* Ниже кнопки "Подарок" */
+            top: 130px; /* Перемещен ниже кнопки "Подарок" */
             left: 50%;
             transform: translateX(-50%);
             font-size: 14px;
@@ -223,7 +221,7 @@
 
     <!-- Колесо фортуны -->
     <div class="wheel-container">
-        <div class="arrow"></div>
+        <div class="pointer"></div> <!-- Красная линия как указатель -->
         <div class="wheel" id="wheel">
             <div class="line"></div>
             <div class="line"></div>
