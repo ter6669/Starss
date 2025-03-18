@@ -44,36 +44,18 @@
             color: #ccc;
         }
 
-        /* Контейнеры */
+        /* Левый контейнер */
         .container {
             background: rgba(255, 255, 255, 0.1);
             padding: 15px;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            width: 150px; /* Увеличенная ширина */
+            width: 150px;
             position: absolute;
+            top: 100px; /* Поднят выше */
+            left: 20px;
             z-index: 2;
             text-align: center;
-        }
-
-        .container.left {
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .container.right {
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: gold; /* Золотой фон */
-            animation: pulse 2s infinite; /* Пульсация */
-        }
-
-        @keyframes pulse {
-            0% { transform: translateY(-50%) scale(1); }
-            50% { transform: translateY(-50%) scale(1.1); }
-            100% { transform: translateY(-50%) scale(1); }
         }
 
         .container span {
@@ -82,22 +64,47 @@
             margin: 10px 0;
         }
 
-        /* Таймер */
-        .timer {
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
+        /* Смайлик подарка */
+        .gift {
+            position: absolute;
+            top: 100px; /* Поднят выше */
+            right: 20px;
+            font-size: 60px; /* Увеличен в 3 раза */
+            z-index: 2;
+            animation: pulse 2s infinite; /* Пульсация */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Стрелка */
+        .arrow {
+            position: absolute;
+            top: 200px; /* Позиция над колесом */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            z-index: 2;
+            animation: bounce 1s infinite; /* Анимация стрелки */
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
         }
 
         /* Колесо фортуны */
         .wheel {
             position: relative;
-            width: 300px; /* Увеличенное колесо */
+            width: 300px;
             height: 300px;
             border: 10px solid black;
             border-radius: 50%;
             background: #1a1a1a;
-            margin-top: 100px; /* Опущено ниже */
+            margin-top: 250px; /* Опущено ниже */
             z-index: 1;
         }
 
@@ -146,15 +153,15 @@
     </div>
 
     <!-- Левый контейнер -->
-    <div class="container left">
+    <div class="container">
         <span>Баланс</span>
     </div>
 
-    <!-- Правый контейнер -->
-    <div class="container right">
-        <span>🎁</span>
-        <div class="timer" id="timer">03:59:59</div>
-    </div>
+    <!-- Смайлик подарка -->
+    <div class="gift">🎁</div>
+
+    <!-- Стрелка -->
+    <div class="arrow">👇</div>
 
     <!-- Колесо фортуны -->
     <div class="wheel-container">
@@ -170,7 +177,6 @@
 
     <script>
         const wheel = document.getElementById("wheel");
-        const timer = document.getElementById("timer");
 
         let isSpinning = false;
 
@@ -201,22 +207,6 @@
 
         // Обработчик клика на колесо
         wheel.addEventListener("click", spinWheel);
-
-        // Таймер
-        let timeLeft = 3 * 60 * 60 + 59 * 60 + 59; // 03:59:59 в секундах
-        const timerInterval = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                timer.innerText = "00:00:00";
-                return;
-            }
-            const hours = Math.floor(timeLeft / 3600);
-            const minutes = Math.floor((timeLeft % 3600) / 60);
-            const seconds = timeLeft % 60;
-            const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            timer.innerText = timeString;
-            timeLeft--;
-        }, 1000);
     </script>
 </body>
 </html>
