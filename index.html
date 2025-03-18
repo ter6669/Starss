@@ -34,29 +34,34 @@
             background: #1a1a1a; /* Темно-темно серый фон */
             margin-top: 50px;
             z-index: 1; /* Колесо под стрелкой */
+            transform-style: preserve-3d; /* 3D-эффект */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Тень для объема */
         }
 
-        /* Белые линии для разделения секторов */
-        .wheel::before,
-        .wheel::after,
-        .wheel .line {
-            content: '';
+        /* Секторы колеса */
+        .wheel .sector {
             position: absolute;
-            width: 2px;
+            width: 100%;
             height: 100%;
-            background: white;
-            top: 0;
-            left: 50%;
+            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
             transform-origin: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
         }
 
-        .wheel::before { transform: rotate(45deg); }
-        .wheel::after { transform: rotate(90deg); }
-        .wheel .line:nth-child(1) { transform: rotate(135deg); }
-        .wheel .line:nth-child(2) { transform: rotate(180deg); }
-        .wheel .line:nth-child(3) { transform: rotate(225deg); }
-        .wheel .line:nth-child(4) { transform: rotate(270deg); }
-        .wheel .line:nth-child(5) { transform: rotate(315deg); }
+        /* Цвета секторов */
+        .wheel .sector:nth-child(1) { background: #ff6b6b; transform: rotate(0deg); }
+        .wheel .sector:nth-child(2) { background: #ffa500; transform: rotate(45deg); }
+        .wheel .sector:nth-child(3) { background: #ffd700; transform: rotate(90deg); }
+        .wheel .sector:nth-child(4) { background: #90ee90; transform: rotate(135deg); }
+        .wheel .sector:nth-child(5) { background: #87ceeb; transform: rotate(180deg); }
+        .wheel .sector:nth-child(6) { background: #ff69b4; transform: rotate(225deg); }
+        .wheel .sector:nth-child(7) { background: #9370db; transform: rotate(270deg); }
+        .wheel .sector:nth-child(8) { background: #ff4500; transform: rotate(315deg); }
 
         /* Указатель */
         .pointer {
@@ -70,6 +75,18 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
+            animation: pointerBounce 1s infinite; /* Анимация указателя */
+        }
+
+        @keyframes pointerBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* Анимация вращения */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -78,16 +95,25 @@
     <div class="wheel-container">
         <div class="pointer"></div> <!-- Указатель -->
         <div class="wheel" id="wheel">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
+            <div class="sector">Приз 1</div>
+            <div class="sector">Приз 2</div>
+            <div class="sector">Приз 3</div>
+            <div class="sector">Приз 4</div>
+            <div class="sector">Приз 5</div>
+            <div class="sector">Приз 6</div>
+            <div class="sector">Приз 7</div>
+            <div class="sector">Приз 8</div>
         </div>
     </div>
 
+    <!-- Аудио для звуковых эффектов -->
+    <audio id="spinSound" src="spin-sound.mp3"></audio>
+    <audio id="winSound" src="win-sound.mp3"></audio>
+
     <script>
         const wheel = document.getElementById("wheel");
+        const spinSound = document.getElementById("spinSound");
+        const winSound = document.getElementById("winSound");
 
         let isSpinning = false;
 
@@ -95,6 +121,9 @@
         function spinWheel() {
             if (isSpinning) return;
             isSpinning = true;
+
+            // Воспроизводим звук вращения
+            spinSound.play();
 
             const randomRotation = Math.floor(Math.random() * 360) + 2880; // Случайное вращение
             wheel.style.transition = "transform 8s cubic-bezier(0.1, 0.7, 0.1, 1)"; // Медленная остановка
@@ -109,6 +138,7 @@
                 // Определяем выигрышный сектор
                 const winningSector = Math.floor(actualRotation / 45) + 1;
                 if (winningSector === 4) { // Золотой сектор
+                    winSound.play(); // Воспроизводим звук победы
                     alert("Вы выиграли! 🎉");
                 } else {
                     alert("Попробуйте ещё раз!");
