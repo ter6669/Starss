@@ -27,7 +27,7 @@
             position: relative;
             width: 300px;
             height: 300px;
-            border: 10px solid black;
+            border: 10px solid black; /* Ободок вокруг колеса */
             border-radius: 50%;
             overflow: hidden;
             display: flex;
@@ -59,7 +59,6 @@
             font-size: 24px;
             font-weight: bold;
             color: black;
-            border: 2px solid black; /* Жирная черная рамка */
         }
 
         /* Цвета секторов */
@@ -71,6 +70,17 @@
         .sector:nth-child(6) { background: white; transform: rotate(225deg); }
         .sector:nth-child(7) { background: red; transform: rotate(270deg); }
         .sector:nth-child(8) { background: gray; transform: rotate(315deg); }
+
+        /* Ободки между секторами */
+        .sector::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+            transform-origin: center;
+            border-right: 2px solid black; /* Тонкая черная линия между секторами */
+        }
 
         /* Кнопки */
         .buttons {
