@@ -22,46 +22,82 @@
             background: linear-gradient(135deg, #1a1a1a, #333); /* Градиентный фон */
         }
 
-        /* Контейнер */
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px; /* Уменьшенный padding */
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            width: 100px; /* Уменьшенная ширина */
+        /* Заголовок и ник Telegram */
+        .profile-header {
             position: absolute;
-            left: 20px; /* Перемещено левее */
-            top: 20px; /* Оставлено сверху */
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
             z-index: 2;
         }
 
-        /* Заголовок */
-        .title {
-            font-size: 14px; /* Уменьшенный размер шрифта */
+        .profile-header h1 {
+            font-size: 24px;
             font-weight: bold;
-            margin-bottom: 10px; /* Уменьшенный отступ */
+            margin: 0;
         }
 
-        /* Информация о профиле */
-        .profile-info {
-            font-size: 12px; /* Уменьшенный размер шрифта */
-            margin-bottom: 10px; /* Уменьшенный отступ */
+        .profile-header p {
+            font-size: 16px;
+            margin: 5px 0 0;
+            color: #ccc;
         }
 
-        .profile-info span {
+        /* Контейнеры */
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 150px; /* Увеличенная ширина */
+            position: absolute;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .container.left {
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .container.right {
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: gold; /* Золотой фон */
+            animation: pulse 2s infinite; /* Пульсация */
+        }
+
+        @keyframes pulse {
+            0% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.1); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+
+        .container span {
             display: block;
-            margin: 5px 0; /* Уменьшенный отступ */
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Таймер */
+        .timer {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
         }
 
         /* Колесо фортуны */
         .wheel {
             position: relative;
-            width: 200px;
-            height: 200px;
+            width: 300px; /* Увеличенное колесо */
+            height: 300px;
             border: 10px solid black;
             border-radius: 50%;
             background: #1a1a1a;
-            margin-top: 20px;
+            margin-top: 100px; /* Опущено ниже */
             z-index: 1;
         }
 
@@ -100,46 +136,24 @@
             transform: translateX(-50%);
             z-index: 2;
         }
-
-        /* Адаптивность */
-        @media (max-width: 600px) {
-            .container {
-                width: 80px; /* Еще меньше на маленьких экранах */
-                padding: 5px;
-                left: 10px;
-                top: 10px;
-            }
-
-            .title {
-                font-size: 12px;
-            }
-
-            .profile-info {
-                font-size: 10px;
-            }
-
-            .wheel {
-                width: 150px;
-                height: 150px;
-            }
-
-            .pointer {
-                border-left: 15px solid transparent;
-                border-right: 15px solid transparent;
-                border-bottom: 30px solid red;
-                top: -40px;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">Профиль:</div>
-        <div class="profile-info">
-            <span>Баланс</span>
-            <span>Вращений</span>
-            <span>Количество прокруток</span>
-        </div>
+    <!-- Заголовок и ник Telegram -->
+    <div class="profile-header">
+        <h1>Профиль</h1>
+        <p>@username</p>
+    </div>
+
+    <!-- Левый контейнер -->
+    <div class="container left">
+        <span>Баланс</span>
+    </div>
+
+    <!-- Правый контейнер -->
+    <div class="container right">
+        <span>🎁</span>
+        <div class="timer" id="timer">03:59:59</div>
     </div>
 
     <!-- Колесо фортуны -->
@@ -156,6 +170,7 @@
 
     <script>
         const wheel = document.getElementById("wheel");
+        const timer = document.getElementById("timer");
 
         let isSpinning = false;
 
@@ -186,6 +201,22 @@
 
         // Обработчик клика на колесо
         wheel.addEventListener("click", spinWheel);
+
+        // Таймер
+        let timeLeft = 3 * 60 * 60 + 59 * 60 + 59; // 03:59:59 в секундах
+        const timerInterval = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timer.innerText = "00:00:00";
+                return;
+            }
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            timer.innerText = timeString;
+            timeLeft--;
+        }, 1000);
     </script>
 </body>
 </html>
