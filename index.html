@@ -29,6 +29,7 @@
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             width: 300px;
+            margin-bottom: 20px;
         }
 
         /* Заголовок */
@@ -59,6 +60,57 @@
             display: block;
             margin: 5px 0;
         }
+
+        /* Колесо фортуны */
+        .wheel {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border: 10px solid black;
+            border-radius: 50%;
+            background: #1a1a1a;
+            margin-top: 20px;
+            z-index: 1;
+        }
+
+        /* Секторы колеса */
+        .wheel .sector {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+            transform-origin: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Цвета секторов */
+        .wheel .sector:nth-child(1) { background: #ff6b6b; transform: rotate(0deg); }
+        .wheel .sector:nth-child(2) { background: #ffa500; transform: rotate(45deg); }
+        .wheel .sector:nth-child(3) { background: #ffd700; transform: rotate(90deg); }
+        .wheel .sector:nth-child(4) { background: #90ee90; transform: rotate(135deg); }
+        .wheel .sector:nth-child(5) { background: #87ceeb; transform: rotate(180deg); }
+        .wheel .sector:nth-child(6) { background: #ff69b4; transform: rotate(225deg); }
+        .wheel .sector:nth-child(7) { background: #9370db; transform: rotate(270deg); }
+        .wheel .sector:nth-child(8) { background: #ff4500; transform: rotate(315deg); }
+
+        /* Указатель */
+        .pointer {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid red;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
@@ -74,5 +126,54 @@
             <span>7,000 AP</span>
         </div>
     </div>
+
+    <!-- Колесо фортуны -->
+    <div class="wheel-container">
+        <div class="pointer"></div> <!-- Указатель -->
+        <div class="wheel" id="wheel">
+            <div class="sector">Приз 1</div>
+            <div class="sector">Приз 2</div>
+            <div class="sector">Приз 3</div>
+            <div class="sector">Приз 4</div>
+            <div class="sector">Приз 5</div>
+            <div class="sector">Приз 6</div>
+            <div class="sector">Приз 7</div>
+            <div class="sector">Приз 8</div>
+        </div>
+    </div>
+
+    <script>
+        const wheel = document.getElementById("wheel");
+
+        let isSpinning = false;
+
+        // Функция для вращения колеса
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            const randomRotation = Math.floor(Math.random() * 360) + 2880; // Случайное вращение
+            wheel.style.transition = "transform 8s cubic-bezier(0.1, 0.7, 0.1, 1)"; // Медленная остановка
+            wheel.style.transform = `rotate(${randomRotation}deg)`;
+
+            setTimeout(() => {
+                isSpinning = false;
+                wheel.style.transition = "none";
+                const actualRotation = randomRotation % 360;
+                wheel.style.transform = `rotate(${actualRotation}deg)`;
+
+                // Определяем выигрышный сектор
+                const winningSector = Math.floor(actualRotation / 45) + 1;
+                if (winningSector === 4) { // Золотой сектор
+                    alert("Вы выиграли! 🎉");
+                } else {
+                    alert("Попробуйте ещё раз!");
+                }
+            }, 8000);
+        }
+
+        // Обработчик клика на колесо
+        wheel.addEventListener("click", spinWheel);
+    </script>
 </body>
 </html>
