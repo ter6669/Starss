@@ -55,47 +55,77 @@
         .wheel .line:nth-child(4) { transform: rotate(270deg); }
         .wheel .line:nth-child(5) { transform: rotate(315deg); }
 
-        /* Красная полукруглая стрелка */
+        /* Стрелка над колесом */
         .arrow {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            background: red;
-            clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
-            left: -50px;
-            top: 50%;
-            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid red;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 2;
         }
 
-        /* Кнопки */
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .button {
+        /* Кнопка "Вывод" */
+        #withdrawButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
             padding: 10px 20px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            color: white;
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid white;
-            border-radius: 20px;
+            border-radius: 10px;
             cursor: pointer;
             backdrop-filter: blur(10px);
             transition: transform 0.2s, background 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
-        .button:hover {
+        #withdrawButton:hover {
             transform: scale(1.1);
             background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Кнопка "Подарок" */
+        #prizesButton {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s, background 0.2s;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        #prizesButton:hover {
+            animation: none;
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Таймер под кнопкой "Подарок" */
+        #giftTimer {
+            position: absolute;
+            top: 130px;
+            left: 20px;
+            font-size: 14px;
+            color: white;
         }
 
         /* Кнопка "Вращать" */
@@ -169,13 +199,6 @@
         .modal button:hover {
             background: #ff4500;
         }
-
-        /* Таймер */
-        .timer {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
@@ -184,17 +207,18 @@
         Вращений: <span id="spinCount">10</span>
     </div>
 
-    <!-- Кнопки -->
-    <div class="buttons">
-        <button class="button" id="prizesButton">
-            🎁
-            <div>Подарок</div>
-        </button>
-        <button class="button" id="withdrawButton">
-            💰
-            <div>Вывод</div>
-        </button>
-    </div>
+    <!-- Кнопка "Вывод" -->
+    <button id="withdrawButton">
+        💰
+        <div>Вывод</div>
+    </button>
+
+    <!-- Кнопка "Подарок" -->
+    <button id="prizesButton">
+        🎁
+        <div>Подарок</div>
+    </button>
+    <div id="giftTimer">24:00:00</div>
 
     <!-- Колесо фортуны -->
     <div class="wheel-container">
@@ -227,6 +251,7 @@
         const claimButton = document.getElementById("claimButton");
         const timer = document.getElementById("timer");
         const spinCount = document.getElementById("spinCount");
+        const giftTimer = document.getElementById("giftTimer");
 
         let isSpinning = false;
         let spins = 10; // Начальное количество вращений
@@ -304,12 +329,15 @@
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     timer.innerText = "00:00:00";
+                    giftTimer.innerText = "00:00:00";
                     return;
                 }
                 const hours = Math.floor(timeLeft / 3600);
                 const minutes = Math.floor((timeLeft % 3600) / 60);
                 const seconds = timeLeft % 60;
-                timer.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                timer.innerText = timeString;
+                giftTimer.innerText = timeString;
                 timeLeft--;
             }, 1000);
         }
