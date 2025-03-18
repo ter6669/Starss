@@ -88,21 +88,25 @@
         .buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 10px; /* Уменьшили расстояние между кнопками */
             margin-top: 20px;
         }
 
         .button {
-            padding: 15px 30px;
+            padding: 10px 20px; /* Уменьшили ширину, увеличили высоту */
             font-size: 18px;
             font-weight: bold;
             color: white;
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid white;
-            border-radius: 50px;
+            border-radius: 20px; /* Сделали кнопки более узкими */
             cursor: pointer;
             backdrop-filter: blur(10px);
             transition: transform 0.2s, background 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .button:hover {
@@ -115,22 +119,41 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .balance span {
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
     <!-- Баланс -->
-    <div class="balance" id="balance">БАЛАНС: 10</div>
+    <div class="balance" id="balance">
+        Баланс
+        <span>10 💳</span>
+    </div>
 
     <!-- Кнопки -->
     <div class="buttons">
-        <button class="button" id="spinButton">Вращения</button>
-        <button class="button" id="prizesButton">Призы</button>
-        <button class="button" id="withdrawButton">Вывод</button>
+        <button class="button" id="spinButton">
+            🕹️
+            <div>Попыток</div>
+        </button>
+        <button class="button" id="prizesButton">
+            🎁
+            <div>Подарок</div>
+        </button>
+        <button class="button" id="withdrawButton">
+            💰
+            <div>Вывод</div>
+        </button>
     </div>
 
     <!-- Колесо фортуны -->
@@ -168,7 +191,7 @@
             }, 3000);
         }
 
-        // Обработчик клика на кнопку "Вращения"
+        // Обработчик клика на кнопку "Попыток"
         spinButton.addEventListener("click", spinWheel);
     </script>
 </body>
