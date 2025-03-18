@@ -181,16 +181,11 @@
 <body>
     <!-- Баланс -->
     <div class="balance" id="balance">
-        Баланс
-        <span>10 💳</span>
+        Вращений: <span id="spinCount">10</span>
     </div>
 
     <!-- Кнопки -->
     <div class="buttons">
-        <button class="button" id="attemptsButton">
-            🕹️
-            <div>Попыток</div>
-        </button>
         <button class="button" id="prizesButton">
             🎁
             <div>Подарок</div>
@@ -231,19 +226,27 @@
         const giftModal = document.getElementById("giftModal");
         const claimButton = document.getElementById("claimButton");
         const timer = document.getElementById("timer");
+        const spinCount = document.getElementById("spinCount");
 
         let isSpinning = false;
-        let spins = 0;
+        let spins = 10; // Начальное количество вращений
         let timerInterval;
         let lastClaimTime = localStorage.getItem("lastClaimTime");
 
+        // Обновление отображения баланса
+        function updateSpinCount() {
+            spinCount.innerText = spins;
+        }
+
         // Функция для вращения колеса
         function spinWheel() {
-            if (isSpinning) return;
+            if (isSpinning || spins < 1) return;
             isSpinning = true;
+            spins -= 1; // Отнимаем 1 вращение
+            updateSpinCount();
 
-            const randomRotation = Math.floor(Math.random() * 360) + 1440; // Случайное вращение
-            wheel.style.transition = "transform 6s ease-out";
+            const randomRotation = Math.floor(Math.random() * 360) + 2880; // Случайное вращение
+            wheel.style.transition = "transform 8s cubic-bezier(0.1, 0.7, 0.1, 1)"; // Медленная остановка
             wheel.style.transform = `rotate(${randomRotation}deg)`;
 
             setTimeout(() => {
@@ -251,8 +254,17 @@
                 wheel.style.transition = "none";
                 const actualRotation = randomRotation % 360;
                 wheel.style.transform = `rotate(${actualRotation}deg)`;
-                alert(`Выигрышный сектор: ${Math.floor(actualRotation / 45) + 1}`);
-            }, 6000);
+
+                // Определяем выигрышный сектор
+                const winningSector = Math.floor(actualRotation / 45) + 1;
+                if (winningSector === 4) { // Золотой сектор
+                    spins += 2; // Добавляем 2 вращения
+                    updateSpinCount();
+                    alert("Вы выиграли 2 вращения! 🎉");
+                } else {
+                    alert("Попробуйте ещё раз!");
+                }
+            }, 8000);
         }
 
         // Обработчик клика на кнопку "Вращать"
@@ -270,6 +282,7 @@
         // Обработчик клика на кнопку "Получить"
         claimButton.addEventListener("click", () => {
             spins += 1;
+            updateSpinCount();
             localStorage.setItem("lastClaimTime", Date.now());
             giftModal.style.display = "none";
             alert("Вы получили 1 вращение!");
@@ -305,6 +318,9 @@
         if (lastClaimTime) {
             startTimer();
         }
+
+        // Инициализация баланса
+        updateSpinCount();
     </script>
 </body>
 </html>
