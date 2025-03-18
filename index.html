@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Tickets</title>
+    <title>Профиль</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -25,40 +25,32 @@
         /* Контейнер */
         .container {
             background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
+            padding: 10px; /* Уменьшенный padding */
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            width: 300px;
-            margin-bottom: 20px;
+            width: 100px; /* Уменьшенная ширина */
+            position: absolute;
+            left: 20px; /* Перемещено левее */
+            top: 20px; /* Оставлено сверху */
+            z-index: 2;
         }
 
         /* Заголовок */
         .title {
-            font-size: 24px;
+            font-size: 14px; /* Уменьшенный размер шрифта */
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Уменьшенный отступ */
         }
 
-        /* Баланс */
-        .balance {
-            font-size: 18px;
-            margin-bottom: 15px;
+        /* Информация о профиле */
+        .profile-info {
+            font-size: 12px; /* Уменьшенный размер шрифта */
+            margin-bottom: 10px; /* Уменьшенный отступ */
         }
 
-        .balance span {
+        .profile-info span {
             display: block;
-            margin: 5px 0;
-        }
-
-        /* Дополнительные элементы */
-        .additional {
-            font-size: 16px;
-            margin-top: 20px;
-        }
-
-        .additional span {
-            display: block;
-            margin: 5px 0;
+            margin: 5px 0; /* Уменьшенный отступ */
         }
 
         /* Колесо фортуны */
@@ -73,30 +65,27 @@
             z-index: 1;
         }
 
-        /* Секторы колеса */
-        .wheel .sector {
+        /* Белые линии для разделения секторов */
+        .wheel::before,
+        .wheel::after,
+        .wheel .line {
+            content: '';
             position: absolute;
-            width: 100%;
+            width: 2px;
             height: 100%;
-            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+            background: white;
+            top: 0;
+            left: 50%;
             transform-origin: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
         }
 
-        /* Цвета секторов */
-        .wheel .sector:nth-child(1) { background: #ff6b6b; transform: rotate(0deg); }
-        .wheel .sector:nth-child(2) { background: #ffa500; transform: rotate(45deg); }
-        .wheel .sector:nth-child(3) { background: #ffd700; transform: rotate(90deg); }
-        .wheel .sector:nth-child(4) { background: #90ee90; transform: rotate(135deg); }
-        .wheel .sector:nth-child(5) { background: #87ceeb; transform: rotate(180deg); }
-        .wheel .sector:nth-child(6) { background: #ff69b4; transform: rotate(225deg); }
-        .wheel .sector:nth-child(7) { background: #9370db; transform: rotate(270deg); }
-        .wheel .sector:nth-child(8) { background: #ff4500; transform: rotate(315deg); }
+        .wheel::before { transform: rotate(45deg); }
+        .wheel::after { transform: rotate(90deg); }
+        .wheel .line:nth-child(1) { transform: rotate(135deg); }
+        .wheel .line:nth-child(2) { transform: rotate(180deg); }
+        .wheel .line:nth-child(3) { transform: rotate(225deg); }
+        .wheel .line:nth-child(4) { transform: rotate(270deg); }
+        .wheel .line:nth-child(5) { transform: rotate(315deg); }
 
         /* Указатель */
         .pointer {
@@ -111,19 +100,45 @@
             transform: translateX(-50%);
             z-index: 2;
         }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .container {
+                width: 80px; /* Еще меньше на маленьких экранах */
+                padding: 5px;
+                left: 10px;
+                top: 10px;
+            }
+
+            .title {
+                font-size: 12px;
+            }
+
+            .profile-info {
+                font-size: 10px;
+            }
+
+            .wheel {
+                width: 150px;
+                height: 150px;
+            }
+
+            .pointer {
+                border-left: 15px solid transparent;
+                border-right: 15px solid transparent;
+                border-bottom: 30px solid red;
+                top: -40px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="title">Your tickets</div>
-        <div class="balance">
-            <span>0.58 TON</span>
-            <span>80 NOT</span>
-            <span>10,000 AP</span>
-        </div>
-        <div class="additional">
-            <span>4 TON</span>
-            <span>7,000 AP</span>
+        <div class="title">Профиль:</div>
+        <div class="profile-info">
+            <span>Баланс</span>
+            <span>Вращений</span>
+            <span>Количество прокруток</span>
         </div>
     </div>
 
@@ -131,14 +146,11 @@
     <div class="wheel-container">
         <div class="pointer"></div> <!-- Указатель -->
         <div class="wheel" id="wheel">
-            <div class="sector">Приз 1</div>
-            <div class="sector">Приз 2</div>
-            <div class="sector">Приз 3</div>
-            <div class="sector">Приз 4</div>
-            <div class="sector">Приз 5</div>
-            <div class="sector">Приз 6</div>
-            <div class="sector">Приз 7</div>
-            <div class="sector">Приз 8</div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
         </div>
     </div>
 
