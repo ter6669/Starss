@@ -20,6 +20,7 @@
             overflow: hidden;
             position: relative;
             background: #2c3e50; /* Темно-серый фон */
+            padding-bottom: 70px; /* Отступ для нижней панели */
         }
 
         /* Колесо фортуны */
@@ -209,6 +210,42 @@
         .modal button:hover {
             background: #ff4500;
         }
+
+        /* Нижняя панель с кнопками */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #1a1a1a; /* Темный фон */
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000; /* Чтобы панель была поверх других элементов */
+        }
+
+        /* Стили для кнопок в нижней панели */
+        .bottom-nav button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .bottom-nav button:hover {
+            background: #333; /* Темно-серый фон при наведении */
+            transform: scale(1.1);
+        }
+
+        .bottom-nav button:active {
+            transform: scale(0.9);
+        }
     </style>
 </head>
 <body>
@@ -252,6 +289,14 @@
             <div class="timer" id="timer">24:00:00</div>
         </div>
         <button id="claimButton">Получить</button>
+    </div>
+
+    <!-- Нижняя панель с кнопками -->
+    <div class="bottom-nav">
+        <button onclick="window.location.href='index.html'">Главная</button>
+        <button onclick="window.location.href='profile.html'">Профиль</button>
+        <button onclick="window.location.href='settings.html'">Настройки</button>
+        <button onclick="window.location.href='history.html'">История</button>
     </div>
 
     <script>
