@@ -57,25 +57,24 @@
         .wheel .line:nth-child(4) { transform: rotate(270deg); }
         .wheel .line:nth-child(5) { transform: rotate(315deg); }
 
-        /* Красная стрелка как указатель */
+        /* Указатель */
         .pointer {
             position: absolute;
-            width: 40px; /* Ширина стрелки */
-            height: 40px; /* Высота стрелки */
-            background: red;
-            border-radius: 50%; /* Делаем круглую форму */
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* Острый конец внизу */
-            top: -60px; /* Позиционируем выше колеса */
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid red; /* Треугольник */
+            top: -50px;
             left: 50%;
-            transform: translateX(-50%) rotate(180deg); /* Центрируем и поворачиваем */
-            z-index: 2; /* Стрелка поверх колеса */
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7); /* Тень для эффекта */
+            transform: translateX(-50%);
+            z-index: 2;
         }
 
         /* Кнопка "Подарок" */
         #prizesButton {
             position: absolute;
-            top: 80px; /* Перемещена немного ниже */
+            top: 80px;
             left: 20px;
             padding: 8px 16px;
             font-size: 14px;
@@ -138,47 +137,6 @@
             gap: 10px;
         }
 
-        /* Модальное окно для подарка */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            z-index: 1000;
-            text-align: center;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        .modal button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .modal button:hover {
-            background: #ff4500;
-        }
-
         /* Нижняя панель с кнопками */
         .bottom-nav {
             position: fixed;
@@ -196,10 +154,11 @@
 
         /* Стили для кнопок в нижней панели */
         .bottom-nav button {
-            background: none;
+            background: #ff6b6b;
             border: none;
             color: white;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
             padding: 10px 20px;
             border-radius: 10px;
@@ -207,34 +166,12 @@
         }
 
         .bottom-nav button:hover {
-            background: #333; /* Темно-серый фон при наведении */
+            background: #ff4500;
             transform: scale(1.1);
         }
 
         .bottom-nav button:active {
             transform: scale(0.9);
-        }
-
-        /* Круглая кнопка "Крути!" */
-        .spin-circle {
-            width: 80px;
-            height: 80px;
-            background: #ff6b6b;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .spin-circle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 107, 107, 0.9);
         }
 
         /* Значок настроек */
@@ -297,12 +234,12 @@
     <!-- Кнопка "Подарок" -->
     <button id="prizesButton">
         🎁
-        <div>Подарок</div>
+        <div id="prizesText">Подарок</div>
     </button>
 
     <!-- Колесо фортуны -->
     <div class="wheel-container">
-        <div class="pointer"></div> <!-- Красная стрелка как указатель -->
+        <div class="pointer"></div> <!-- Указатель -->
         <div class="wheel" id="wheel">
             <div class="line"></div>
             <div class="line"></div>
@@ -317,9 +254,9 @@
 
     <!-- Нижняя панель с кнопками -->
     <div class="bottom-nav">
-        <button onclick="window.location.href='friends.html'">Друзья</button>
-        <div class="spin-circle" id="spinCircle">Крути!</div>
-        <button onclick="window.location.href='withdraw.html'">Вывод</button>
+        <button onclick="window.location.href='friends.html'"><span id="friendsText">Друзья</span></button>
+        <button onclick="window.location.href='index.html'">Крути!</button>
+        <button onclick="window.location.href='withdraw.html'"><span id="withdrawText">Вывод</span></button>
     </div>
 
     <!-- Модальное окно настроек -->
@@ -334,10 +271,12 @@
     <script>
         const wheel = document.getElementById("wheel");
         const spinButton = document.getElementById("spinButton");
-        const spinCircle = document.getElementById("spinCircle");
         const settingsIcon = document.getElementById("settingsIcon");
         const settingsModal = document.getElementById("settingsModal");
         const spinCount = document.getElementById("spinCount");
+        const friendsText = document.getElementById("friendsText");
+        const withdrawText = document.getElementById("withdrawText");
+        const prizesText = document.getElementById("prizesText");
 
         let isSpinning = false;
         let spins = 10; // Начальное количество вращений
@@ -378,7 +317,6 @@
 
         // Обработчик клика на кнопку "Вращать"
         spinButton.addEventListener("click", spinWheel);
-        spinCircle.addEventListener("click", spinWheel);
 
         // Обработчик клика на значок настроек
         settingsIcon.addEventListener("click", () => {
@@ -389,13 +327,16 @@
         function changeLanguage(lang) {
             if (lang === 'ru') {
                 spinButton.innerText = "Вращать";
-                spinCircle.innerText = "Крути!";
-                settingsModal.style.display = "none";
+                friendsText.innerText = "Друзья";
+                withdrawText.innerText = "Вывод";
+                prizesText.innerText = "Подарок";
             } else if (lang === 'en') {
                 spinButton.innerText = "Spin";
-                spinCircle.innerText = "Spin!";
-                settingsModal.style.display = "none";
+                friendsText.innerText = "Friends";
+                withdrawText.innerText = "Withdraw";
+                prizesText.innerText = "Gift";
             }
+            settingsModal.style.display = "none";
         }
 
         // Инициализация баланса
