@@ -55,13 +55,15 @@
         .wheel .line:nth-child(4) { transform: rotate(270deg); }
         .wheel .line:nth-child(5) { transform: rotate(315deg); }
 
-        /* Красная линия как указатель выигрыша */
+        /* Красная стрелка как указатель выигрыша */
         .pointer {
             position: absolute;
-            width: 2px;
-            height: 50%;
-            background: red;
-            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid red;
+            top: -50px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -125,6 +127,7 @@
             transform: translateX(-50%);
             font-size: 14px;
             color: white;
+            display: none; /* Скрыт по умолчанию */
         }
 
         /* Кнопка "Вращать" */
@@ -221,7 +224,7 @@
 
     <!-- Колесо фортуны -->
     <div class="wheel-container">
-        <div class="pointer"></div> <!-- Красная линия как указатель -->
+        <div class="pointer"></div> <!-- Красная стрелка как указатель -->
         <div class="wheel" id="wheel">
             <div class="line"></div>
             <div class="line"></div>
@@ -323,6 +326,7 @@
 
         // Таймер
         function startTimer() {
+            giftTimer.style.display = "block"; // Показываем таймер
             let timeLeft = 24 * 60 * 60; // 24 часа в секундах
             timerInterval = setInterval(() => {
                 if (timeLeft <= 0) {
