@@ -59,28 +59,18 @@
             font-size: 24px;
             font-weight: bold;
             color: black;
+            border-right: 2px solid black; /* Ободок между секторами */
         }
 
         /* Цвета секторов */
         .sector:nth-child(1) { background: gray; transform: rotate(0deg); }
-        .sector:nth-child(2) { background: white; transform: rotate(45deg); }
+        .sector:nth-child(2) { background: gray; transform: rotate(45deg); }
         .sector:nth-child(3) { background: gray; transform: rotate(90deg); }
-        .sector:nth-child(4) { background: gold; transform: rotate(135deg); }
+        .sector:nth-child(4) { background: gray; transform: rotate(135deg); }
         .sector:nth-child(5) { background: gray; transform: rotate(180deg); }
-        .sector:nth-child(6) { background: white; transform: rotate(225deg); }
-        .sector:nth-child(7) { background: red; transform: rotate(270deg); }
-        .sector:nth-child(8) { background: gray; transform: rotate(315deg); }
-
-        /* Ободки между секторами */
-        .sector::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
-            transform-origin: center;
-            border-right: 2px solid black; /* Тонкая черная линия между секторами */
-        }
+        .sector:nth-child(6) { background: gray; transform: rotate(225deg); }
+        .sector:nth-child(7) { background: gray; transform: rotate(270deg); }
+        .sector:nth-child(8) { background: gold; border-right: 2px solid gold; transform: rotate(315deg); }
 
         /* Кнопки */
         .buttons {
@@ -112,6 +102,25 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
+        /* Кнопка "Вращать" */
+        #spinButton {
+            margin-top: 20px;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #spinButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+
         /* Баланс */
         .balance {
             font-size: 24px;
@@ -140,7 +149,7 @@
 
     <!-- Кнопки -->
     <div class="buttons">
-        <button class="button" id="spinButton">
+        <button class="button" id="attemptsButton">
             🕹️
             <div>Попыток</div>
         </button>
@@ -166,6 +175,9 @@
         <div class="sector"></div>
     </div>
 
+    <!-- Кнопка "Вращать" -->
+    <button id="spinButton">Вращать</button>
+
     <script>
         const wheel = document.getElementById("wheel");
         const spinButton = document.getElementById("spinButton");
@@ -189,7 +201,7 @@
             }, 3000);
         }
 
-        // Обработчик клика на кнопку "Попыток"
+        // Обработчик клика на кнопку "Вращать"
         spinButton.addEventListener("click", spinWheel);
     </script>
 </body>
