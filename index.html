@@ -19,20 +19,7 @@
             color: white;
             overflow: hidden;
             position: relative;
-            background: url('background.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
-
-        /* Затемнение фона */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -1;
+            background: #2c3e50; /* Темно-серый фон */
         }
 
         /* Колесо фортуны */
@@ -75,14 +62,14 @@
         }
 
         /* Цвета секторов */
-        .sector:nth-child(1) { background: gray; transform: rotate(0deg); }
-        .sector:nth-child(2) { background: white; transform: rotate(45deg); }
-        .sector:nth-child(3) { background: gray; transform: rotate(90deg); }
-        .sector:nth-child(4) { background: gold; transform: rotate(135deg); }
-        .sector:nth-child(5) { background: gray; transform: rotate(180deg); }
-        .sector:nth-child(6) { background: white; transform: rotate(225deg); }
-        .sector:nth-child(7) { background: gray; transform: rotate(270deg); }
-        .sector:nth-child(8) { background: white; transform: rotate(315deg); }
+        .sector:nth-child(1) { background: red; transform: rotate(0deg); }
+        .sector:nth-child(2) { background: blue; transform: rotate(45deg); }
+        .sector:nth-child(3) { background: green; transform: rotate(90deg); }
+        .sector:nth-child(4) { background: yellow; transform: rotate(135deg); }
+        .sector:nth-child(5) { background: orange; transform: rotate(180deg); }
+        .sector:nth-child(6) { background: purple; transform: rotate(225deg); }
+        .sector:nth-child(7) { background: pink; transform: rotate(270deg); }
+        .sector:nth-child(8) { background: cyan; transform: rotate(315deg); }
 
         /* Кнопки */
         .buttons {
