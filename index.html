@@ -22,6 +22,27 @@
             background: linear-gradient(135deg, #1a1a1a, #333); /* Градиентный фон */
         }
 
+        /* Контейнер для стикеров */
+        .stickers {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Расстояние между стикерами */
+            margin-bottom: 20px; /* Отступ от колеса */
+        }
+
+        /* Стили для стикеров */
+        .sticker {
+            background-color: #444; /* Цвет фона */
+            border: 2px solid #666; /* Граница */
+            border-radius: 10px; /* Закругленные углы */
+            padding: 10px 20px; /* Внутренние отступы */
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+        }
+
         /* Колесо фортуны */
         .wheel {
             position: relative;
@@ -30,7 +51,7 @@
             border: 20px solid black; /* Увеличенная толщина рамки */
             border-radius: 50%;
             background: #1a1a1a;
-            margin-top: 50px;
+            margin-top: 20px;
             z-index: 1;
         }
 
@@ -84,6 +105,13 @@
     </style>
 </head>
 <body>
+    <!-- Контейнер для стикеров -->
+    <div class="stickers">
+        <div class="sticker">Билеты</div>
+        <div class="sticker">Вывод</div>
+        <div class="sticker">Подарки</div>
+    </div>
+
     <!-- Колесо фортуны -->
     <div class="wheel-container">
         <div class="pointer"></div> <!-- Указатель -->
