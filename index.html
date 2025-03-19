@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Профиль</title>
+    <title>Колесо Фортуны</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -22,80 +22,6 @@
             background: linear-gradient(135deg, #1a1a1a, #333); /* Градиентный фон */
         }
 
-        /* Заголовок и ник Telegram */
-        .profile-header {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            z-index: 2;
-        }
-
-        .profile-header h1 {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .profile-header p {
-            font-size: 16px;
-            margin: 5px 0 0;
-            color: #ccc;
-        }
-
-        /* Левый контейнер */
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            width: 150px;
-            position: absolute;
-            top: 100px; /* Поднят выше */
-            left: 20px;
-            z-index: 2;
-            text-align: center;
-        }
-
-        .container span {
-            display: block;
-            font-size: 18px;
-            margin: 10px 0;
-        }
-
-        /* Смайлик подарка */
-        .gift {
-            position: absolute;
-            top: 100px; /* Поднят выше */
-            right: 20px;
-            font-size: 60px; /* Увеличен в 3 раза */
-            z-index: 2;
-            animation: pulse 2s infinite; /* Пульсация */
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Стрелка */
-        .arrow {
-            position: absolute;
-            top: 200px; /* Позиция над колесом */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 40px;
-            z-index: 2;
-            animation: bounce 1s infinite; /* Анимация стрелки */
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-        }
-
         /* Колесо фортуны */
         .wheel {
             position: relative;
@@ -104,7 +30,7 @@
             border: 10px solid black;
             border-radius: 50%;
             background: #1a1a1a;
-            margin-top: 250px; /* Опущено ниже */
+            margin-top: 50px;
             z-index: 1;
         }
 
@@ -138,7 +64,7 @@
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
             border-bottom: 40px solid red;
-            top: -50px;
+            top: -20px; /* Позиция над колесом */
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -146,23 +72,6 @@
     </style>
 </head>
 <body>
-    <!-- Заголовок и ник Telegram -->
-    <div class="profile-header">
-        <h1>Профиль</h1>
-        <p>@username</p>
-    </div>
-
-    <!-- Левый контейнер -->
-    <div class="container">
-        <span>Баланс</span>
-    </div>
-
-    <!-- Смайлик подарка -->
-    <div class="gift">🎁</div>
-
-    <!-- Стрелка -->
-    <div class="arrow">👇</div>
-
     <!-- Колесо фортуны -->
     <div class="wheel-container">
         <div class="pointer"></div> <!-- Указатель -->
