@@ -19,7 +19,36 @@
             color: white;
             overflow: hidden;
             position: relative;
-            background: linear-gradient(135deg, #1a1a1a, #333); /* Градиентный фон */
+            background-color: #0a192f; /* Темно-синий фон */
+        }
+
+        /* Эффект зернистости */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, #0a192f 20%, #0a192f 80%, transparent 80%, transparent),
+                        radial-gradient(circle, transparent 20%, #0a192f 20%, #0a192f 80%, transparent 80%, transparent) 50px 50px;
+            background-size: 10px 10px;
+            opacity: 0.2;
+            z-index: -1;
+            animation: grain 8s steps(10) infinite;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            20% { transform: translate(-10%, 5%); }
+            30% { transform: translate(5%, -10%); }
+            40% { transform: translate(-5%, 15%); }
+            50% { transform: translate(-10%, 5%); }
+            60% { transform: translate(15%, 0); }
+            70% { transform: translate(0, 10%); }
+            80% { transform: translate(-15%, 0); }
+            90% { transform: translate(10%, 5%); }
         }
 
         /* Контейнер для стикеров */
