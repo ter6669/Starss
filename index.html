@@ -27,14 +27,14 @@
             position: relative;
             width: 300px;
             height: 300px;
-            border: 10px solid black;
+            border: 20px solid black; /* Увеличенная толщина рамки */
             border-radius: 50%;
             background: #1a1a1a;
             margin-top: 50px;
             z-index: 1;
         }
 
-        /* Белые линии для разделения секторов */
+        /* Черные линии для разделения секторов */
         .wheel::before,
         .wheel::after,
         .wheel .line {
@@ -42,7 +42,7 @@
             position: absolute;
             width: 2px;
             height: 100%;
-            background: white;
+            background: black; /* Черные линии */
             top: 0;
             left: 50%;
             transform-origin: center;
@@ -64,7 +64,7 @@
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
             border-top: 40px solid red; /* Перевернутый треугольник */
-            top: 330px; /* Опущен ниже колеса */
+            top: 300px; /* Поднят выше */
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
