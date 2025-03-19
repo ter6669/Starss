@@ -64,22 +64,34 @@
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
             border-top: 40px solid red; /* Перевернутый треугольник */
-            top: 280px; /* Поднят ещё выше */
+            top: 270px; /* Поднимаем стрелку выше (было 280px) */
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
         }
 
-        /* Стили для цифры */
-        .number {
+        /* Стили для круга с цифрой */
+        .circle {
             position: absolute;
-            top: 50%;
+            top: 40%; /* Поднимаем цифру выше */
             left: 50%;
             transform: translate(-50%, -50%) rotate(22.5deg); /* Центрируем и поворачиваем */
+            width: 40px; /* Размер круга */
+            height: 40px; /* Размер круга */
+            background-color: #444; /* Цвет фона круга */
+            border: 2px solid white; /* Белая рамка */
+            border-radius: 50%; /* Делаем круг */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        /* Стили для цифры внутри круга */
+        .number {
             font-size: 24px;
             font-weight: bold;
             color: white;
-            z-index: 2;
         }
     </style>
 </head>
@@ -93,8 +105,10 @@
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
-            <!-- Добавляем цифру 1 на один из секторов -->
-            <div class="number">1</div>
+            <!-- Добавляем круг с цифрой 1 -->
+            <div class="circle">
+                <div class="number">1</div>
+            </div>
         </div>
     </div>
 
