@@ -50,7 +50,7 @@
             height: 300px;
             border: 20px solid black; /* Увеличенная толщина рамки */
             border-radius: 50%;
-            background: #1a1a1a;
+            background: linear-gradient(to top, #1a1a1a, #444); /* Градиентный фон снизу вверх */
             margin-top: 20px;
             z-index: 1;
         }
@@ -104,6 +104,16 @@
             color: white;
             z-index: 2;
         }
+
+        /* Стили для выделенных секторов */
+        .sector {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(50% 50%, 100% 50%, 100% 0, 50% 0);
+            transform-origin: center;
+            background-color: red; /* Красный цвет для выделенных секторов */
+        }
     </style>
 </head>
 <body>
@@ -132,6 +142,35 @@
 
     <script>
         const wheel = document.getElementById("wheel");
+
+        // Функция для выделения случайных секторов
+        function highlightRandomSectors() {
+            const sectors = [];
+            for (let i = 0; i < 8; i++) {
+                sectors.push(i);
+            }
+
+            // Выбираем 3 случайных сектора
+            const selectedSectors = [];
+            while (selectedSectors.length < 3) {
+                const randomIndex = Math.floor(Math.random() * sectors.length);
+                if (!selectedSectors.includes(sectors[randomIndex])) {
+                    selectedSectors.push(sectors[randomIndex]);
+                }
+            }
+
+            // Добавляем красные сектора
+            selectedSectors.forEach(sector => {
+                const angle = sector * 45; // Каждый сектор занимает 45 градусов
+                const sectorDiv = document.createElement("div");
+                sectorDiv.classList.add("sector");
+                sectorDiv.style.transform = `rotate(${angle}deg)`;
+                wheel.appendChild(sectorDiv);
+            });
+        }
+
+        // Выделяем случайные сектора при загрузке страницы
+        highlightRandomSectors();
 
         let isSpinning = false;
 
