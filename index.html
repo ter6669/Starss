@@ -73,9 +73,10 @@
         /* Стили для круга с цифрой */
         .circle {
             position: absolute;
-            top: 40%; /* Поднимаем цифру выше */
+            top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(0deg); /* Убираем начальный поворот */
+            transform: translate(-50%, -50%) rotate(22.5deg); /* Поворачиваем на центр сектора */
+            transform-origin: center 150px; /* Смещаем центр вращения на край колеса */
             width: 40px; /* Размер круга */
             height: 40px; /* Размер круга */
             background-color: #444; /* Цвет фона круга */
