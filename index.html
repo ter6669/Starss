@@ -56,6 +56,26 @@
         .wheel .line:nth-child(4) { transform: rotate(270deg); }
         .wheel .line:nth-child(5) { transform: rotate(315deg); }
 
+        /* Секторы колеса */
+        .sector {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+            transform-origin: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Выигрышный сектор */
+        .sector.winning {
+            background: gold; /* Золотой фон для выигрышного сектора */
+        }
+
         /* Указатель */
         .pointer {
             position: absolute;
@@ -76,11 +96,14 @@
     <div class="wheel-container">
         <div class="pointer"></div> <!-- Указатель -->
         <div class="wheel" id="wheel">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
+            <div class="sector">1</div>
+            <div class="sector">2</div>
+            <div class="sector">3</div>
+            <div class="sector winning">⭐️</div> <!-- Выигрышный сектор -->
+            <div class="sector">5</div>
+            <div class="sector">6</div>
+            <div class="sector">7</div>
+            <div class="sector">8</div>
         </div>
     </div>
 
