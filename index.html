@@ -70,29 +70,16 @@
             z-index: 2;
         }
 
-        /* Стили для круга с цифрой */
-        .circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(22.5deg); /* Поворачиваем на центр сектора */
-            transform-origin: center 150px; /* Смещаем центр вращения на край колеса */
-            width: 40px; /* Размер круга */
-            height: 40px; /* Размер круга */
-            background-color: #444; /* Цвет фона круга */
-            border: 2px solid white; /* Белая рамка */
-            border-radius: 50%; /* Делаем круг */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-        }
-
-        /* Стили для цифры внутри круга */
+        /* Стили для цифры */
         .number {
+            position: absolute;
+            top: 25%; /* Поднимаем цифру выше */
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(22.5deg); /* Центрируем и поворачиваем */
             font-size: 24px;
             font-weight: bold;
             color: white;
+            z-index: 2;
         }
     </style>
 </head>
@@ -106,10 +93,8 @@
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
-            <!-- Добавляем круг с цифрой 1 -->
-            <div class="circle">
-                <div class="number">1</div>
-            </div>
+            <!-- Добавляем цифру 1 -->
+            <div class="number">1</div>
         </div>
     </div>
 
