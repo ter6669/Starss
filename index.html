@@ -40,7 +40,7 @@
         .wheel .line {
             content: '';
             position: absolute;
-            width: 2px;
+            width: 4px; /* Увеличенная толщина линий */
             height: 100%;
             background: black; /* Черные линии */
             top: 0;
@@ -64,7 +64,7 @@
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
             border-top: 40px solid red; /* Перевернутый треугольник */
-            top: 300px; /* Поднят выше */
+            top: 280px; /* Поднят ещё выше */
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -94,8 +94,8 @@
             if (isSpinning) return;
             isSpinning = true;
 
-            const randomRotation = Math.floor(Math.random() * 360) + 2880; // Случайное вращение
-            wheel.style.transition = "transform 8s cubic-bezier(0.1, 0.7, 0.1, 1)"; // Медленная остановка
+            const randomRotation = Math.floor(Math.random() * 360) + 4320; // Увеличенное вращение
+            wheel.style.transition = "transform 12s cubic-bezier(0.1, 0.7, 0.1, 1)"; // Увеличенное замедление
             wheel.style.transform = `rotate(${randomRotation}deg)`;
 
             setTimeout(() => {
@@ -111,7 +111,7 @@
                 } else {
                     alert("Попробуйте ещё раз!");
                 }
-            }, 8000);
+            }, 12000); // Увеличенное время анимации
         }
 
         // Обработчик клика на колесо
