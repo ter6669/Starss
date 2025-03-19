@@ -82,6 +82,43 @@
             z-index: 2;
             transform-origin: center;
         }
+
+        /* Белая панель */
+        .panel {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2); /* Тень сверху */
+        }
+
+        /* Стили для кнопки */
+        .button {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background: #ff4757; /* Красный цвет */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Тень для 3D-эффекта */
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Эффект нажатия на кнопку */
+        .button:active {
+            transform: translateY(5px); /* Смещение вниз при нажатии */
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3); /* Уменьшение тени при нажатии */
+        }
     </style>
 </head>
 <body>
@@ -106,8 +143,14 @@
         </div>
     </div>
 
+    <!-- Белая панель с кнопкой -->
+    <div class="panel">
+        <div class="button" id="spinButton">🕹️</div>
+    </div>
+
     <script>
         const wheel = document.getElementById("wheel");
+        const spinButton = document.getElementById("spinButton");
 
         let isSpinning = false;
 
@@ -135,7 +178,7 @@
             }, 16000); // Увеличенное время анимации
         }
 
-        wheel.addEventListener("click", spinWheel);
+        spinButton.addEventListener("click", spinWheel);
     </script>
 </body>
 </html>
