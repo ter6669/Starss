@@ -83,6 +83,29 @@
             transform-origin: center;
         }
 
+        /* Панели сверху */
+        .top-panel {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        /* Стили для панелей */
+        .panel {
+            background: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон */
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+        }
+
         /* Стили для кнопки */
         .button {
             position: absolute;
@@ -122,6 +145,12 @@
     </style>
 </head>
 <body>
+    <!-- Панели сверху -->
+    <div class="top-panel">
+        <div class="panel" id="balancePanel">💳 - <span id="balance">100</span></div>
+        <div class="panel" id="spinCountPanel">🕹️ - <span id="spinCount">0</span></div>
+    </div>
+
     <!-- Колесо фортуны -->
     <div class="wheel-container">
         <div class="pointer"></div> <!-- Указатель -->
@@ -149,12 +178,22 @@
     <script>
         const wheel = document.getElementById("wheel");
         const spinButton = document.getElementById("spinButton");
+        const balanceElement = document.getElementById("balance");
+        const spinCountElement = document.getElementById("spinCount");
 
         let isSpinning = false;
+        let balance = 100; // Начальный баланс
+        let spinCount = 0; // Количество вращений
 
         function spinWheel() {
-            if (isSpinning) return;
+            if (isSpinning || balance < 10) return; // Нельзя крутить, если баланс меньше 10
             isSpinning = true;
+            balance -= 10; // Уменьшаем баланс на 10 за каждое вращение
+            spinCount += 1; // Увеличиваем счетчик вращений
+
+            // Обновляем отображение баланса и счетчика
+            balanceElement.textContent = balance;
+            spinCountElement.textContent = spinCount;
 
             const randomRotation = Math.floor(Math.random() * 360) + 4320; // Увеличенное вращение
             wheel.style.transition = "transform 16s cubic-bezier(0.1, 0.7, 0.1, 1)"; // Увеличенное замедление
