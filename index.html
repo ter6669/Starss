@@ -13,14 +13,14 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: #f0f0f0;
+            background: url('background.jpg') no-repeat center center fixed; /* Локальный файл фона */
+            background-size: cover;
         }
 
         .wheel-container {
             position: relative;
-            width: 300px;
-            height: 300px;
-            margin-bottom: 50px;
+            width: 250px; /* Уменьшенный размер колеса */
+            height: 250px; /* Уменьшенный размер колеса */
         }
 
         .wheel {
@@ -40,32 +40,6 @@
             height: 100%;
             clip-path: polygon(50% 50%, 100% 0, 100% 100%);
             transform-origin: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .stand {
-            width: 200px;
-            height: 20px;
-            background: #555;
-            position: relative;
-            top: -10px;
-            border-radius: 10px;
-        }
-
-        .stand::before {
-            content: '';
-            position: absolute;
-            width: 10px;
-            height: 100px;
-            background: #555;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
         }
 
         .pointer {
@@ -75,9 +49,9 @@
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid red;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid red;
             z-index: 2;
         }
     </style>
@@ -86,26 +60,25 @@
     <div class="wheel-container">
         <div class="wheel">
             <!-- Сектора колеса -->
-            <div class="sector" style="transform: rotate(0deg); background: red;">1</div>
-            <div class="sector" style="transform: rotate(22.5deg); background: green;">2</div>
-            <div class="sector" style="transform: rotate(45deg); background: blue;">3</div>
-            <div class="sector" style="transform: rotate(67.5deg); background: yellow;">4</div>
-            <div class="sector" style="transform: rotate(90deg); background: purple;">5</div>
-            <div class="sector" style="transform: rotate(112.5deg); background: orange;">6</div>
-            <div class="sector" style="transform: rotate(135deg); background: pink;">7</div>
-            <div class="sector" style="transform: rotate(157.5deg); background: cyan;">8</div>
-            <div class="sector" style="transform: rotate(180deg); background: brown;">9</div>
-            <div class="sector" style="transform: rotate(202.5deg); background: gray;">10</div>
-            <div class="sector" style="transform: rotate(225deg); background: magenta;">11</div>
-            <div class="sector" style="transform: rotate(247.5deg); background: lime;">12</div>
-            <div class="sector" style="transform: rotate(270deg); background: teal;">13</div>
-            <div class="sector" style="transform: rotate(292.5deg); background: navy;">14</div>
-            <div class="sector" style="transform: rotate(315deg); background: olive;">15</div>
-            <div class="sector" style="transform: rotate(337.5deg); background: maroon;">16</div>
+            <div class="sector" style="transform: rotate(0deg); background: red;"></div>
+            <div class="sector" style="transform: rotate(22.5deg); background: green;"></div>
+            <div class="sector" style="transform: rotate(45deg); background: blue;"></div>
+            <div class="sector" style="transform: rotate(67.5deg); background: yellow;"></div>
+            <div class="sector" style="transform: rotate(90deg); background: purple;"></div>
+            <div class="sector" style="transform: rotate(112.5deg); background: orange;"></div>
+            <div class="sector" style="transform: rotate(135deg); background: pink;"></div>
+            <div class="sector" style="transform: rotate(157.5deg); background: cyan;"></div>
+            <div class="sector" style="transform: rotate(180deg); background: brown;"></div>
+            <div class="sector" style="transform: rotate(202.5deg); background: gray;"></div>
+            <div class="sector" style="transform: rotate(225deg); background: magenta;"></div>
+            <div class="sector" style="transform: rotate(247.5deg); background: lime;"></div>
+            <div class="sector" style="transform: rotate(270deg); background: teal;"></div>
+            <div class="sector" style="transform: rotate(292.5deg); background: navy;"></div>
+            <div class="sector" style="transform: rotate(315deg); background: olive;"></div>
+            <div class="sector" style="transform: rotate(337.5deg); background: maroon;"></div>
         </div>
         <div class="pointer"></div>
     </div>
-    <div class="stand"></div>
 
     <script>
         const wheel = document.querySelector('.wheel');
