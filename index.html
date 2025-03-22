@@ -83,6 +83,13 @@
             transform-origin: center;
         }
 
+        /* Красный фон для сектора "10x ⭐️" */
+        .number[data-sector="2"] {
+            background: red;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
         /* Панели сверху */
         .top-panel {
             position: absolute;
@@ -161,14 +168,14 @@
             <div class="line"></div>
             <div class="line"></div>
             <!-- Новые символы на каждый сектор -->
-            <div class="number" style="--rotate: 22.5deg;">❌</div>
-            <div class="number" style="--rotate: 67.5deg;">10x ⭐️</div>
-            <div class="number" style="--rotate: 112.5deg;">❌</div>
-            <div class="number" style="--rotate: 157.5deg;">2x ⭐️</div>
-            <div class="number" style="--rotate: 202.5deg;">3x ⭐️</div>
-            <div class="number" style="--rotate: 247.5deg;">❌</div>
-            <div class="number" style="--rotate: 292.5deg;">⅁</div>
-            <div class="number" style="--rotate: 337.5deg;">0x ⭐️</div>
+            <div class="number" data-sector="1" style="--rotate: 22.5deg;">❌</div>
+            <div class="number" data-sector="2" style="--rotate: 67.5deg;">10x ⭐️</div>
+            <div class="number" data-sector="3" style="--rotate: 112.5deg;">❌</div>
+            <div class="number" data-sector="4" style="--rotate: 157.5deg;">2x ⭐️</div>
+            <div class="number" data-sector="5" style="--rotate: 202.5deg;">❌</div>
+            <div class="number" data-sector="6" style="--rotate: 247.5deg;">3x ⭐️</div>
+            <div class="number" data-sector="7" style="--rotate: 292.5deg;">❌</div>
+            <div class="number" data-sector="8" style="--rotate: 337.5deg;">⅁</div>
         </div>
     </div>
 
@@ -223,16 +230,16 @@
                         resultMessage = "🎉 Вы выиграли 2x ⭐️!";
                         break;
                     case 5:
-                        resultMessage = "🎉 Вы выиграли 3x ⭐️!";
-                        break;
-                    case 6:
                         resultMessage = "❌ Попробуйте ещё раз!";
                         break;
+                    case 6:
+                        resultMessage = "🎉 Вы выиграли 3x ⭐️!";
+                        break;
                     case 7:
-                        resultMessage = "🎉 Вы выиграли ⅁!";
+                        resultMessage = "❌ Попробуйте ещё раз!";
                         break;
                     case 8:
-                        resultMessage = "🎉 Вы выиграли 0x ⭐️!";
+                        resultMessage = "🎉 Вы выиграли ⅁!";
                         break;
                     default:
                         resultMessage = "Ошибка определения сектора.";
