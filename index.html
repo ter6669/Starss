@@ -13,7 +13,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: url('background.JPG') no-repeat center center fixed; /* Локальный файл фона */
+            background: url('background.jpg') no-repeat center center fixed; /* Локальный файл фона */
             background-size: cover;
         }
 
@@ -21,6 +21,8 @@
             position: relative;
             width: 250px; /* Уменьшенный размер колеса */
             height: 250px; /* Уменьшенный размер колеса */
+            margin-top: 100px; /* Опускаем колесо ниже */
+            margin-left: -50px; /* Сдвигаем колесо левее */
         }
 
         .wheel {
@@ -59,23 +61,19 @@
 <body>
     <div class="wheel-container">
         <div class="wheel">
-            <!-- Сектора колеса -->
+            <!-- Сектора колеса (12 секторов) -->
             <div class="sector" style="transform: rotate(0deg); background: red;"></div>
-            <div class="sector" style="transform: rotate(22.5deg); background: green;"></div>
-            <div class="sector" style="transform: rotate(45deg); background: blue;"></div>
-            <div class="sector" style="transform: rotate(67.5deg); background: yellow;"></div>
-            <div class="sector" style="transform: rotate(90deg); background: purple;"></div>
-            <div class="sector" style="transform: rotate(112.5deg); background: orange;"></div>
-            <div class="sector" style="transform: rotate(135deg); background: pink;"></div>
-            <div class="sector" style="transform: rotate(157.5deg); background: cyan;"></div>
-            <div class="sector" style="transform: rotate(180deg); background: brown;"></div>
-            <div class="sector" style="transform: rotate(202.5deg); background: gray;"></div>
-            <div class="sector" style="transform: rotate(225deg); background: magenta;"></div>
-            <div class="sector" style="transform: rotate(247.5deg); background: lime;"></div>
-            <div class="sector" style="transform: rotate(270deg); background: teal;"></div>
-            <div class="sector" style="transform: rotate(292.5deg); background: navy;"></div>
-            <div class="sector" style="transform: rotate(315deg); background: olive;"></div>
-            <div class="sector" style="transform: rotate(337.5deg); background: maroon;"></div>
+            <div class="sector" style="transform: rotate(30deg); background: green;"></div>
+            <div class="sector" style="transform: rotate(60deg); background: blue;"></div>
+            <div class="sector" style="transform: rotate(90deg); background: yellow;"></div>
+            <div class="sector" style="transform: rotate(120deg); background: purple;"></div>
+            <div class="sector" style="transform: rotate(150deg); background: orange;"></div>
+            <div class="sector" style="transform: rotate(180deg); background: pink;"></div>
+            <div class="sector" style="transform: rotate(210deg); background: cyan;"></div>
+            <div class="sector" style="transform: rotate(240deg); background: brown;"></div>
+            <div class="sector" style="transform: rotate(270deg); background: gray;"></div>
+            <div class="sector" style="transform: rotate(300deg); background: magenta;"></div>
+            <div class="sector" style="transform: rotate(330deg); background: lime;"></div>
         </div>
         <div class="pointer"></div>
     </div>
@@ -98,7 +96,7 @@
                 const actualRotation = randomRotation % 360;
                 wheel.style.transform = `rotate(${actualRotation}deg)`;
 
-                const winningSector = Math.floor(actualRotation / 22.5) + 1;
+                const winningSector = Math.floor(actualRotation / 30) + 1; // 12 секторов = 360 / 30
                 alert(`Вы выиграли сектор ${winningSector}!`);
             }, 5000);
         }
