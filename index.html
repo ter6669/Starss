@@ -21,8 +21,7 @@
             position: relative;
             width: 250px; /* Уменьшенный размер колеса */
             height: 250px; /* Уменьшенный размер колеса */
-            margin-top: 100px; /* Опускаем колесо ниже */
-            margin-left: -50px; /* Сдвигаем колесо левее */
+            margin-top: 150px; /* Опускаем колесо ниже */
         }
 
         .wheel {
@@ -36,13 +35,33 @@
             box-sizing: border-box;
         }
 
-        .sector {
+        /* Линии, разделяющие круг на 16 секторов */
+        .line {
             position: absolute;
-            width: 100%;
+            width: 4px; /* Толщина линии */
             height: 100%;
-            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+            background: black; /* Цвет линии */
+            top: 0;
+            left: 50%;
             transform-origin: center;
         }
+
+        .line:nth-child(1) { transform: rotate(11.25deg); }
+        .line:nth-child(2) { transform: rotate(33.75deg); }
+        .line:nth-child(3) { transform: rotate(56.25deg); }
+        .line:nth-child(4) { transform: rotate(78.75deg); }
+        .line:nth-child(5) { transform: rotate(101.25deg); }
+        .line:nth-child(6) { transform: rotate(123.75deg); }
+        .line:nth-child(7) { transform: rotate(146.25deg); }
+        .line:nth-child(8) { transform: rotate(168.75deg); }
+        .line:nth-child(9) { transform: rotate(191.25deg); }
+        .line:nth-child(10) { transform: rotate(213.75deg); }
+        .line:nth-child(11) { transform: rotate(236.25deg); }
+        .line:nth-child(12) { transform: rotate(258.75deg); }
+        .line:nth-child(13) { transform: rotate(281.25deg); }
+        .line:nth-child(14) { transform: rotate(303.75deg); }
+        .line:nth-child(15) { transform: rotate(326.25deg); }
+        .line:nth-child(16) { transform: rotate(348.75deg); }
 
         .pointer {
             position: absolute;
@@ -61,19 +80,23 @@
 <body>
     <div class="wheel-container">
         <div class="wheel">
-            <!-- Сектора колеса (12 секторов) -->
-            <div class="sector" style="transform: rotate(0deg); background: red;"></div>
-            <div class="sector" style="transform: rotate(30deg); background: green;"></div>
-            <div class="sector" style="transform: rotate(60deg); background: blue;"></div>
-            <div class="sector" style="transform: rotate(90deg); background: yellow;"></div>
-            <div class="sector" style="transform: rotate(120deg); background: purple;"></div>
-            <div class="sector" style="transform: rotate(150deg); background: orange;"></div>
-            <div class="sector" style="transform: rotate(180deg); background: pink;"></div>
-            <div class="sector" style="transform: rotate(210deg); background: cyan;"></div>
-            <div class="sector" style="transform: rotate(240deg); background: brown;"></div>
-            <div class="sector" style="transform: rotate(270deg); background: gray;"></div>
-            <div class="sector" style="transform: rotate(300deg); background: magenta;"></div>
-            <div class="sector" style="transform: rotate(330deg); background: lime;"></div>
+            <!-- Линии, разделяющие круг на 16 секторов -->
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
         </div>
         <div class="pointer"></div>
     </div>
@@ -96,7 +119,7 @@
                 const actualRotation = randomRotation % 360;
                 wheel.style.transform = `rotate(${actualRotation}deg)`;
 
-                const winningSector = Math.floor(actualRotation / 30) + 1; // 12 секторов = 360 / 30
+                const winningSector = Math.floor(actualRotation / 22.5) + 1; // 16 секторов = 360 / 22.5
                 alert(`Вы выиграли сектор ${winningSector}!`);
             }, 5000);
         }
