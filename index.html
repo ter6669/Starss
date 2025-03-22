@@ -19,7 +19,7 @@
             color: white;
             overflow: hidden;
             position: relative;
-            background: linear-gradient(135deg, #87CEEB, #1E90FF); /* Градиентный фон */
+            background: #87CEEB; /* Светло-голубой фон */
         }
 
         /* Колесо фортуны */
@@ -27,12 +27,11 @@
             position: relative;
             width: 300px;
             height: 300px;
-            border: 20px solid #333; /* Увеличенная толщина рамки */
+            border: 20px solid black; /* Увеличенная толщина рамки */
             border-radius: 50%;
             background: #1a1a1a; /* Однородный черный фон */
             margin-top: 20px;
             z-index: 1;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Тень для колеса */
         }
 
         /* Черные линии для разделения секторов */
@@ -69,7 +68,6 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.8)); /* Тень для указателя */
         }
 
         /* Стили для символов */
@@ -83,14 +81,6 @@
             color: white;
             z-index: 2;
             transform-origin: center;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Тень для текста */
-        }
-
-        /* Красный фон для сектора с «10💳» */
-        .number[style*="202.5deg"] {
-            background: red; /* Красный фон */
-            padding: 10px;
-            border-radius: 10px;
         }
 
         /* Панели сверху */
@@ -114,7 +104,6 @@
             font-size: 20px;
             color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
-            backdrop-filter: blur(5px); /* Размытие фона */
         }
 
         /* Стили для кнопки */
@@ -123,7 +112,7 @@
             bottom: 20px; /* Располагаем кнопку внизу */
             width: 100px; /* Размер кнопки */
             height: 100px; /* Размер кнопки */
-            background: linear-gradient(135deg, #ff4757, #ff6b81); /* Градиентный фон */
+            background: #ff4757; /* Красный цвет */
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -131,7 +120,7 @@
             font-size: 50px; /* Размер эмодзи */
             color: white;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.8); /* Тень для пульсации */
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.8); /* Тень для пульсации */
             animation: pulse 1.5s infinite; /* Анимация пульсации */
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -171,15 +160,15 @@
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
-            <!-- Добавляем символы на каждый сектор -->
-            <div class="number" style="--rotate: 22.5deg;">1💳</div>
-            <div class="number" style="--rotate: 67.5deg;">❌</div>
-            <div class="number" style="--rotate: 112.5deg;">3💳</div>
-            <div class="number" style="--rotate: 157.5deg;">❌</div>
-            <div class="number" style="--rotate: 202.5deg;">10💳</div>
-            <div class="number" style="--rotate: 247.5deg;">⅁</div>
-            <div class="number" style="--rotate: 292.5deg;">❌</div>
-            <div class="number" style="--rotate: 337.5deg;">🎲</div>
+            <!-- Новые символы на каждый сектор -->
+            <div class="number" style="--rotate: 22.5deg;">❌</div>
+            <div class="number" style="--rotate: 67.5deg;">10x ⭐️</div>
+            <div class="number" style="--rotate: 112.5deg;">❌</div>
+            <div class="number" style="--rotate: 157.5deg;">2x ⭐️</div>
+            <div class="number" style="--rotate: 202.5deg;">3x ⭐️</div>
+            <div class="number" style="--rotate: 247.5deg;">❌</div>
+            <div class="number" style="--rotate: 292.5deg;">⅁</div>
+            <div class="number" style="--rotate: 337.5deg;">0x ⭐️</div>
         </div>
     </div>
 
@@ -218,11 +207,38 @@
 
                 // Определяем выигрышный сектор
                 const winningSector = Math.floor(actualRotation / 45) + 1;
-                if (winningSector === 4) { // Золотой сектор
-                    alert("Вы выиграли! 🎉");
-                } else {
-                    alert("Попробуйте ещё раз!");
+                let resultMessage = "";
+
+                switch (winningSector) {
+                    case 1:
+                        resultMessage = "❌ Попробуйте ещё раз!";
+                        break;
+                    case 2:
+                        resultMessage = "🎉 Вы выиграли 10x ⭐️!";
+                        break;
+                    case 3:
+                        resultMessage = "❌ Попробуйте ещё раз!";
+                        break;
+                    case 4:
+                        resultMessage = "🎉 Вы выиграли 2x ⭐️!";
+                        break;
+                    case 5:
+                        resultMessage = "🎉 Вы выиграли 3x ⭐️!";
+                        break;
+                    case 6:
+                        resultMessage = "❌ Попробуйте ещё раз!";
+                        break;
+                    case 7:
+                        resultMessage = "🎉 Вы выиграли ⅁!";
+                        break;
+                    case 8:
+                        resultMessage = "🎉 Вы выиграли 0x ⭐️!";
+                        break;
+                    default:
+                        resultMessage = "Ошибка определения сектора.";
                 }
+
+                alert(resultMessage);
             }, 16000); // Увеличенное время анимации
         }
 
