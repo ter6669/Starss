@@ -19,7 +19,7 @@
             color: white;
             overflow: hidden;
             position: relative;
-            background: #87CEEB; /* Светло-голубой фон */
+            background: linear-gradient(135deg, #87CEEB, #1E90FF); /* Градиентный фон */
         }
 
         /* Колесо фортуны */
@@ -27,11 +27,12 @@
             position: relative;
             width: 300px;
             height: 300px;
-            border: 20px solid black; /* Увеличенная толщина рамки */
+            border: 20px solid #333; /* Увеличенная толщина рамки */
             border-radius: 50%;
             background: #1a1a1a; /* Однородный черный фон */
             margin-top: 20px;
             z-index: 1;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Тень для колеса */
         }
 
         /* Черные линии для разделения секторов */
@@ -68,6 +69,7 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.8)); /* Тень для указателя */
         }
 
         /* Стили для символов */
@@ -81,6 +83,7 @@
             color: white;
             z-index: 2;
             transform-origin: center;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Тень для текста */
         }
 
         /* Панели сверху */
@@ -104,6 +107,7 @@
             font-size: 20px;
             color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+            backdrop-filter: blur(5px); /* Размытие фона */
         }
 
         /* Стили для кнопки */
@@ -112,7 +116,7 @@
             bottom: 20px; /* Располагаем кнопку внизу */
             width: 100px; /* Размер кнопки */
             height: 100px; /* Размер кнопки */
-            background: #ff4757; /* Красный цвет */
+            background: linear-gradient(135deg, #ff4757, #ff6b81); /* Градиентный фон */
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -120,7 +124,7 @@
             font-size: 50px; /* Размер эмодзи */
             color: white;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 71, 87, 0.8); /* Тень для пульсации */
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.8); /* Тень для пульсации */
             animation: pulse 1.5s infinite; /* Анимация пульсации */
             transition: transform 0.2s, box-shadow 0.2s;
         }
