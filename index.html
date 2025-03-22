@@ -65,7 +65,7 @@
 
         .pointer {
             position: absolute;
-            top: 10px; /* Опускаем стрелку ниже (было -20px) */
+            top: 10px; /* Опускаем стрелку ниже */
             left: 50%;
             transform: translateX(-50%);
             width: 0;
@@ -74,6 +74,27 @@
             border-right: 15px solid transparent;
             border-top: 30px solid red;
             z-index: 2;
+        }
+
+        /* Анимация руки */
+        .hand {
+            position: absolute;
+            width: 80px; /* Размер руки */
+            height: auto;
+            bottom: -50px; /* Позиция руки */
+            left: 50%;
+            transform: translateX(-50%) rotate(-30deg); /* Наклон руки */
+            z-index: 3;
+            animation: spinHand 0.5s infinite alternate; /* Анимация руки */
+        }
+
+        @keyframes spinHand {
+            0% {
+                transform: translateX(-50%) rotate(-30deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(30deg);
+            }
         }
     </style>
 </head>
@@ -99,15 +120,21 @@
             <div class="line"></div>
         </div>
         <div class="pointer"></div>
+        <!-- Рука, которая крутит колесо -->
+        <img src="hand.png" alt="Рука" class="hand">
     </div>
 
     <script>
         const wheel = document.querySelector('.wheel');
+        const hand = document.querySelector('.hand');
         let isSpinning = false;
 
         function spinWheel() {
             if (isSpinning) return;
             isSpinning = true;
+
+            // Останавливаем анимацию руки
+            hand.style.animation = 'none';
 
             const randomRotation = Math.floor(Math.random() * 360) + 3600; // Случайное вращение
             wheel.style.transition = 'transform 5s ease-out';
@@ -121,6 +148,9 @@
 
                 const winningSector = Math.floor(actualRotation / 22.5) + 1; // 16 секторов = 360 / 22.5
                 alert(`Вы выиграли сектор ${winningSector}!`);
+
+                // Возвращаем анимацию руки
+                hand.style.animation = 'spinHand 0.5s infinite alternate';
             }, 5000);
         }
 
