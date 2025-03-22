@@ -77,23 +77,23 @@
             z-index: 2;
         }
 
-        /* Человек справа */
+        /* Человек справа (увеличен в 10 раз и сдвинут левее) */
         .person {
             position: absolute;
-            width: 100px; /* Размер человека */
+            width: 1000px; /* Увеличен в 10 раз */
             height: auto;
-            bottom: 0;
-            right: -120px; /* Позиция человека справа */
+            bottom: -400px; /* Позиция человека */
+            right: -800px; /* Сдвинут левее */
             z-index: 3;
         }
 
-        /* Рука, которая крутит колесо */
+        /* Рука, которая крутит колесо (увеличен в 10 раз и сдвинут левее) */
         .hand {
             position: absolute;
-            width: 60px; /* Размер руки */
+            width: 600px; /* Увеличен в 10 раз */
             height: auto;
-            bottom: 40px; /* Позиция руки */
-            right: -80px; /* Рука справа */
+            bottom: -200px; /* Позиция руки */
+            right: -600px; /* Сдвинут левее */
             z-index: 4;
             transform-origin: bottom right;
             animation: spinHand 0.5s infinite alternate; /* Анимация руки */
