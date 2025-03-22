@@ -15,6 +15,7 @@
             margin: 0;
             background: url('background.JPG') no-repeat center center fixed; /* Локальный файл фона */
             background-size: cover;
+            position: relative;
         }
 
         .wheel-container {
@@ -76,24 +77,34 @@
             z-index: 2;
         }
 
-        /* Анимация руки */
+        /* Человек справа */
+        .person {
+            position: absolute;
+            width: 100px; /* Размер человека */
+            height: auto;
+            bottom: 0;
+            right: -120px; /* Позиция человека справа */
+            z-index: 3;
+        }
+
+        /* Рука, которая крутит колесо */
         .hand {
             position: absolute;
-            width: 80px; /* Размер руки */
+            width: 60px; /* Размер руки */
             height: auto;
-            bottom: -50px; /* Позиция руки */
-            left: 50%;
-            transform: translateX(-50%) rotate(-30deg); /* Наклон руки */
-            z-index: 3;
+            bottom: 40px; /* Позиция руки */
+            right: -80px; /* Рука справа */
+            z-index: 4;
+            transform-origin: bottom right;
             animation: spinHand 0.5s infinite alternate; /* Анимация руки */
         }
 
         @keyframes spinHand {
             0% {
-                transform: translateX(-50%) rotate(-30deg);
+                transform: rotate(-30deg);
             }
             100% {
-                transform: translateX(-50%) rotate(30deg);
+                transform: rotate(30deg);
             }
         }
     </style>
@@ -120,6 +131,8 @@
             <div class="line"></div>
         </div>
         <div class="pointer"></div>
+        <!-- Человек справа -->
+        <img src="person.png" alt="Человек" class="person">
         <!-- Рука, которая крутит колесо -->
         <img src="hand.png" alt="Рука" class="hand">
     </div>
