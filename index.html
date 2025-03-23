@@ -27,6 +27,7 @@
             height: 90vw; /* Квадратное колесо */
             max-height: 400px; /* Максимальный размер колеса */
             margin-top: 20px; /* Отступ сверху */
+            overflow: hidden; /* Скрываем часть колеса справа */
         }
 
         /* Колесо */
@@ -39,6 +40,7 @@
             overflow: hidden;
             border: 10px solid #000;
             box-sizing: border-box;
+            transform: translateX(-30%); /* Смещаем колесо влево на 30% */
         }
 
         /* Линии, разделяющие круг на 16 секторов */
@@ -83,17 +85,15 @@
             z-index: 2;
         }
 
-        /* Белая панель снизу */
+        /* Белая панель снизу (растянута до конца экрана) */
         .panel {
             position: absolute;
-            bottom: 20px; /* Отступ снизу */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%; /* Ширина панели */
-            max-width: 400px; /* Максимальная ширина панели */
-            height: 80px;
+            bottom: 0; /* Панель прижата к нижнему краю */
+            left: 0;
+            width: 100%; /* Ширина панели на всю ширину экрана */
+            height: calc(100vh - 420px); /* Высота панели до конца экрана */
             background: white;
-            border-radius: 10px;
+            border-radius: 10px 10px 0 0; /* Закругленные углы сверху */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -162,13 +162,13 @@
 
             const randomRotation = Math.floor(Math.random() * 360) + 3600; // Случайное вращение
             wheel.style.transition = 'transform 5s ease-out';
-            wheel.style.transform = `rotate(${randomRotation}deg)`;
+            wheel.style.transform = `translateX(-30%) rotate(${randomRotation}deg)`; /* Учитываем смещение влево */
 
             setTimeout(() => {
                 isSpinning = false;
                 wheel.style.transition = 'none';
                 const actualRotation = randomRotation % 360;
-                wheel.style.transform = `rotate(${actualRotation}deg)`;
+                wheel.style.transform = `translateX(-30%) rotate(${actualRotation}deg)`; /* Учитываем смещение влево */
 
                 const winningSector = Math.floor(actualRotation / 22.5) + 1; // 16 секторов = 360 / 22.5
                 alert(`Вы выиграли сектор ${winningSector}!`);
