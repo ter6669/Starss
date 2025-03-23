@@ -41,7 +41,7 @@
             overflow: hidden;
             border: 10px solid #000;
             box-sizing: border-box;
-            transform: translateX(30%); /* Смещаем колесо вправо на 30% */
+            transform: translateX(40%); /* Смещаем колесо вправо на 40% */
         }
 
         /* Линии, разделяющие круг на 16 секторов */
@@ -85,17 +85,6 @@
             border-top: 30px solid red;
             z-index: 2;
         }
-
-        /* Эффект "стены" слева */
-        .wall-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 30%; /* Ширина "стены" */
-            height: 100%;
-            background: linear-gradient(to right, #555, #333); /* Градиент для эффекта 3D */
-            z-index: 3;
-        }
     </style>
 </head>
 <body>
@@ -120,8 +109,6 @@
             <div class="line"></div>
         </div>
         <div class="pointer"></div>
-        <!-- Эффект "стены" слева -->
-        <div class="wall-effect"></div>
     </div>
 
     <script>
@@ -132,19 +119,19 @@
             if (isSpinning) return;
             isSpinning = true;
 
-            const randomRotation = Math.floor(Math.random() * 360) + 3600; // Случайное вращение
-            wheel.style.transition = 'transform 5s ease-out';
-            wheel.style.transform = `translateX(30%) rotate(${randomRotation}deg)`; /* Учитываем смещение вправо */
+            const randomRotation = Math.floor(Math.random() * 360) + 7200; // Увеличенное вращение для интриги
+            wheel.style.transition = 'transform 10s cubic-bezier(0.1, 0.7, 0.1, 1)'; /* Долгое замедление */
+            wheel.style.transform = `translateX(40%) rotate(${randomRotation}deg)`; /* Учитываем смещение вправо */
 
             setTimeout(() => {
                 isSpinning = false;
                 wheel.style.transition = 'none';
                 const actualRotation = randomRotation % 360;
-                wheel.style.transform = `translateX(30%) rotate(${actualRotation}deg)`; /* Учитываем смещение вправо */
+                wheel.style.transform = `translateX(40%) rotate(${actualRotation}deg)`; /* Учитываем смещение вправо */
 
                 const winningSector = Math.floor(actualRotation / 22.5) + 1; // 16 секторов = 360 / 22.5
                 alert(`Вы выиграли сектор ${winningSector}!`);
-            }, 5000);
+            }, 10000); // Увеличенное время анимации
         }
 
         wheel.addEventListener('click', spinWheel);
