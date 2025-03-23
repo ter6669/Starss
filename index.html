@@ -2,27 +2,34 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Для адаптации на мобильных устройствах -->
     <title>Колесо Фортуны</title>
     <style>
+        /* Основные стили */
         body {
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            height: 100vh; /* Высота страницы равна высоте видимой области */
             margin: 0;
+            padding: 0;
+            overflow: hidden; /* Убираем скролл */
             background: #f0f0f0; /* Простой фон */
         }
 
+        /* Контейнер для колеса */
         .wheel-container {
             position: relative;
-            width: 400px; /* Увеличенный размер колеса */
-            height: 400px; /* Увеличенный размер колеса */
-            margin-top: 50px; /* Отступ сверху */
+            width: 90vw; /* Колесо адаптируется под ширину экрана */
+            max-width: 400px; /* Максимальный размер колеса */
+            height: 90vw; /* Квадратное колесо */
+            max-height: 400px; /* Максимальный размер колеса */
+            margin-top: 20px; /* Отступ сверху */
         }
 
+        /* Колесо */
         .wheel {
             width: 100%;
             height: 100%;
@@ -62,6 +69,7 @@
         .line:nth-child(15) { transform: rotate(326.25deg); }
         .line:nth-child(16) { transform: rotate(348.75deg); }
 
+        /* Указатель */
         .pointer {
             position: absolute;
             top: 10px; /* Опускаем стрелку ниже */
@@ -78,10 +86,11 @@
         /* Белая панель снизу */
         .panel {
             position: absolute;
-            bottom: 0;
+            bottom: 20px; /* Отступ снизу */
             left: 50%;
             transform: translateX(-50%);
-            width: 80%;
+            width: 90%; /* Ширина панели */
+            max-width: 400px; /* Максимальная ширина панели */
             height: 80px;
             background: white;
             border-radius: 10px;
