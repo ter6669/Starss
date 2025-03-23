@@ -84,35 +84,6 @@
             border-top: 30px solid red;
             z-index: 2;
         }
-
-        /* Белая панель снизу (растянута до конца экрана) */
-        .panel {
-            position: absolute;
-            bottom: 0; /* Панель прижата к нижнему краю */
-            left: 0;
-            width: 100%; /* Ширина панели на всю ширину экрана */
-            height: calc(100vh - 420px); /* Высота панели до конца экрана */
-            background: white;
-            border-radius: 10px 10px 0 0; /* Закругленные углы сверху */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Вертикальные линии в панели */
-        .panel-line {
-            width: 2px;
-            height: 60px;
-            background: #ccc;
-        }
-
-        /* Иконки ⭐️ в панели */
-        .panel-icon {
-            font-size: 30px;
-            color: gold;
-        }
     </style>
 </head>
 <body>
@@ -137,19 +108,6 @@
             <div class="line"></div>
         </div>
         <div class="pointer"></div>
-    </div>
-
-    <!-- Белая панель снизу -->
-    <div class="panel">
-        <div class="panel-icon">⭐️</div>
-        <div class="panel-line"></div>
-        <div class="panel-icon">⭐️</div>
-        <div class="panel-line"></div>
-        <div class="panel-icon">⭐️</div>
-        <div class="panel-line"></div>
-        <div class="panel-icon">⭐️</div>
-        <div class="panel-line"></div>
-        <div class="panel-icon">⭐️</div>
     </div>
 
     <script>
