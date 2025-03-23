@@ -13,23 +13,21 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: url('background.JPG') no-repeat center center fixed; /* Локальный файл фона */
-            background-size: cover;
-            position: relative;
+            background: #f0f0f0; /* Простой фон */
         }
 
         .wheel-container {
             position: relative;
-            width: 250px; /* Уменьшенный размер колеса */
-            height: 250px; /* Уменьшенный размер колеса */
-            margin-top: 150px; /* Опускаем колесо ниже */
+            width: 400px; /* Увеличенный размер колеса */
+            height: 400px; /* Увеличенный размер колеса */
+            margin-top: 50px; /* Отступ сверху */
         }
 
         .wheel {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: blue;
+            background: #ccc; /* Серый фон колеса */
             position: relative;
             overflow: hidden;
             border: 10px solid #000;
@@ -41,7 +39,7 @@
             position: absolute;
             width: 4px; /* Толщина линии */
             height: 100%;
-            background: black; /* Цвет линии */
+            background: #888; /* Серый цвет линий */
             top: 0;
             left: 50%;
             transform-origin: center;
@@ -77,35 +75,34 @@
             z-index: 2;
         }
 
-        /* Человек справа (увеличен в 4 раза) */
-        .person {
+        /* Белая панель снизу */
+        .panel {
             position: absolute;
-            width: 400px; /* Увеличен в 4 раза */
-            height: auto;
             bottom: 0;
-            right: -150px; /* Позиция человека справа */
-            z-index: 3;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 80px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Рука, которая крутит колесо (увеличен в 4 раза) */
-        .hand {
-            position: absolute;
-            width: 240px; /* Увеличен в 4 раза */
-            height: auto;
-            bottom: 40px; /* Позиция руки */
-            right: -120px; /* Рука справа */
-            z-index: 4;
-            transform-origin: bottom right;
-            animation: spinHand 0.5s infinite alternate; /* Анимация руки */
+        /* Вертикальные линии в панели */
+        .panel-line {
+            width: 2px;
+            height: 60px;
+            background: #ccc;
         }
 
-        @keyframes spinHand {
-            0% {
-                transform: rotate(-30deg);
-            }
-            100% {
-                transform: rotate(30deg);
-            }
+        /* Иконки ⭐️ в панели */
+        .panel-icon {
+            font-size: 30px;
+            color: gold;
         }
     </style>
 </head>
@@ -131,23 +128,28 @@
             <div class="line"></div>
         </div>
         <div class="pointer"></div>
-        <!-- Человек справа -->
-        <img src="person.png" alt="Человек" class="person">
-        <!-- Рука, которая крутит колесо -->
-        <img src="hand.png" alt="Рука" class="hand">
+    </div>
+
+    <!-- Белая панель снизу -->
+    <div class="panel">
+        <div class="panel-icon">⭐️</div>
+        <div class="panel-line"></div>
+        <div class="panel-icon">⭐️</div>
+        <div class="panel-line"></div>
+        <div class="panel-icon">⭐️</div>
+        <div class="panel-line"></div>
+        <div class="panel-icon">⭐️</div>
+        <div class="panel-line"></div>
+        <div class="panel-icon">⭐️</div>
     </div>
 
     <script>
         const wheel = document.querySelector('.wheel');
-        const hand = document.querySelector('.hand');
         let isSpinning = false;
 
         function spinWheel() {
             if (isSpinning) return;
             isSpinning = true;
-
-            // Останавливаем анимацию руки
-            hand.style.animation = 'none';
 
             const randomRotation = Math.floor(Math.random() * 360) + 3600; // Случайное вращение
             wheel.style.transition = 'transform 5s ease-out';
@@ -161,9 +163,6 @@
 
                 const winningSector = Math.floor(actualRotation / 22.5) + 1; // 16 секторов = 360 / 22.5
                 alert(`Вы выиграли сектор ${winningSector}!`);
-
-                // Возвращаем анимацию руки
-                hand.style.animation = 'spinHand 0.5s infinite alternate';
             }, 5000);
         }
 
