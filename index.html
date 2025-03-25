@@ -1,140 +1,223 @@
+Вот полностью переработанный код **Колеса Фортуны** с 15 секциями (9 серых, 5 красных, 1 золотая), анимированным вращением, стильной кнопкой и улучшенной логикой:
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Для адаптации на мобильных устройствах -->
-    <title>Колесо Фортуны</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Колесо Фортуны Premium</title>
     <style>
-        /* Основные стили */
+        :root {
+            --gold: #FFD700;
+            --red: #FF5252;
+            --gray: #E0E0E0;
+            --dark-gray: #333;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh; /* Высота страницы равна высоте видимой области */
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
-            overflow: hidden; /* Убираем скролл */
-            background: #f0f0f0; /* Простой фон */
-            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
         }
 
-        /* Контейнер для колеса */
+        h1 {
+            color: var(--dark-gray);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
         .wheel-container {
             position: relative;
-            width: 90vw; /* Колесо адаптируется под ширину экрана */
-            max-width: 400px; /* Максимальный размер колеса */
-            height: 90vw; /* Квадратное колесо */
-            max-height: 400px; /* Максимальный размер колеса */
-            margin-top: 20px; /* Отступ сверху */
-            overflow: hidden; /* Скрываем часть колеса слева */
+            width: 300px;
+            height: 300px;
+            margin-bottom: 40px;
         }
 
-        /* Колесо */
         .wheel {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: #ccc; /* Серый фон колеса */
             position: relative;
             overflow: hidden;
-            border: 10px solid #000;
-            box-sizing: border-box;
-            transform: translateX(40%); /* Смещаем колесо вправо на 40% */
+            border: 8px solid var(--dark-gray);
+            box-shadow: var(--shadow);
+            transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            transform: rotate(0deg);
         }
 
-        /* Линии, разделяющие круг на 16 секторов */
-        .line {
+        .section {
             position: absolute;
-            width: 4px; /* Толщина линии */
-            height: 100%;
-            background: #888; /* Серый цвет линий */
+            width: 50%;
+            height: 50%;
+            transform-origin: bottom right;
+            left: 0;
             top: 0;
-            left: 50%;
-            transform-origin: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-sizing: border-box;
+            padding-left: 30px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
-        .line:nth-child(1) { transform: rotate(11.25deg); }
-        .line:nth-child(2) { transform: rotate(33.75deg); }
-        .line:nth-child(3) { transform: rotate(56.25deg); }
-        .line:nth-child(4) { transform: rotate(78.75deg); }
-        .line:nth-child(5) { transform: rotate(101.25deg); }
-        .line:nth-child(6) { transform: rotate(123.75deg); }
-        .line:nth-child(7) { transform: rotate(146.25deg); }
-        .line:nth-child(8) { transform: rotate(168.75deg); }
-        .line:nth-child(9) { transform: rotate(191.25deg); }
-        .line:nth-child(10) { transform: rotate(213.75deg); }
-        .line:nth-child(11) { transform: rotate(236.25deg); }
-        .line:nth-child(12) { transform: rotate(258.75deg); }
-        .line:nth-child(13) { transform: rotate(281.25deg); }
-        .line:nth-child(14) { transform: rotate(303.75deg); }
-        .line:nth-child(15) { transform: rotate(326.25deg); }
-        .line:nth-child(16) { transform: rotate(348.75deg); }
-
-        /* Указатель */
         .pointer {
             position: absolute;
-            top: 20px; /* Опускаем стрелку ниже */
-            left: 60%; /* Сдвигаем стрелку правее */
-            transform: translateX(-50%) rotate(45deg); /* Наклон стрелки на 45 градусов */
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid red;
-            z-index: 2;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid var(--red);
+            z-index: 10;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+        }
+
+        .spin-btn {
+            background: linear-gradient(45deg, #FF416C, #FF4B2B);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .spin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.6);
+        }
+
+        .spin-btn:active {
+            transform: translateY(1px);
+        }
+
+        .spin-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            margin-top: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            min-height: 36px;
+            color: var(--dark-gray);
+            text-align: center;
         }
     </style>
 </head>
 <body>
+    <h1>Колесо Фортуны</h1>
     <div class="wheel-container">
-        <div class="wheel">
-            <!-- Линии, разделяющие круг на 16 секторов -->
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
+        <div class="wheel" id="wheel">
+            <!-- Секции будут добавлены через JS -->
         </div>
         <div class="pointer"></div>
     </div>
+    <div class="result" id="result"></div>
+    <button class="spin-btn" id="spinBtn">Крутить!</button>
 
     <script>
-        const wheel = document.querySelector('.wheel');
-        let isSpinning = false;
+        document.addEventListener('DOMContentLoaded', () => {
+            const wheel = document.getElementById('wheel');
+            const spinBtn = document.getElementById('spinBtn');
+            const resultEl = document.getElementById('result');
+            
+            // Конфигурация секторов: 9 серых, 5 красных, 1 золотой
+            const sectors = [
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'red', text: '⭐', value: 'Красный приз!' },
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'red', text: '⭐', value: 'Красный приз!' },
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'red', text: '⭐', value: 'Красный приз!' },
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'gold', text: '⭐', value: 'ДЖЕКПОТ!!!' },
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'red', text: '⭐', value: 'Красный приз!' },
+                { color: 'gray', text: '⭐', value: 'Серый приз' },
+                { color: 'red', text: '⭐', value: 'Красный приз!' }
+            ];
 
-        function spinWheel() {
-            if (isSpinning) return;
-            isSpinning = true;
+            // Создаем секции колеса
+            sectors.forEach((sector, index) => {
+                const section = document.createElement('div');
+                section.className = 'section';
+                section.style.transform = `rotate(${index * (360 / sectors.length)}deg)`;
+                
+                // Цвета секторов
+                if (sector.color === 'gold') {
+                    section.style.background = `linear-gradient(45deg, #FFD700, #FFA500)`;
+                } else if (sector.color === 'red') {
+                    section.style.background = `linear-gradient(45deg, #FF5252, #FF1744)`;
+                } else {
+                    section.style.background = `linear-gradient(45deg, #E0E0E0, #BDBDBD)`;
+                }
+                
+                // Текст в секторе
+                section.innerHTML = `<span style="transform: rotate(${360 / (sectors.length * 2)}deg)">${sector.text}</span>`;
+                wheel.appendChild(section);
+            });
 
-            const randomRotation = Math.floor(Math.random() * 360) + 7200; // Увеличенное вращение для интриги
-            wheel.style.transition = 'transform 10s cubic-bezier(0.1, 0.7, 0.1, 1)'; /* Долгое замедление */
-            wheel.style.transform = `translateX(40%) rotate(${randomRotation}deg)`; /* Учитываем смещение вправо */
-
-            setTimeout(() => {
-                isSpinning = false;
-                wheel.style.transition = 'none';
-                const actualRotation = randomRotation % 360;
-                wheel.style.transform = `translateX(40%) rotate(${actualRotation}deg)`; /* Учитываем смещение вправо */
-
-                const winningSector = Math.floor(actualRotation / 22.5) + 1; // 16 секторов = 360 / 22.5
-                alert(`Вы выиграли сектор ${winningSector}!`);
-            }, 10000); // Увеличенное время анимации
-        }
-
-        wheel.addEventListener('click', spinWheel);
+            // Функция вращения
+            spinBtn.addEventListener('click', () => {
+                if (wheel.style.transition === 'none') return;
+                
+                spinBtn.disabled = true;
+                resultEl.textContent = '';
+                
+                // Случайное вращение (5-10 полных оборотов + случайный сектор)
+                const spinDegrees = 1800 + Math.floor(Math.random() * 1800);
+                const winningSectorIndex = Math.floor((spinDegrees % 360) / (360 / sectors.length));
+                const winningSector = sectors[sectors.length - 1 - winningSectorIndex];
+                
+                wheel.style.transform = `rotate(${spinDegrees}deg)`;
+                
+                setTimeout(() => {
+                    spinBtn.disabled = false;
+                    
+                    // Анимация результата
+                    let counter = 0;
+                    const interval = setInterval(() => {
+                        resultEl.textContent = winningSector.value.substring(0, counter);
+                        counter++;
+                        if (counter > winningSector.value.length) clearInterval(interval);
+                    }, 100);
+                    
+                    // Особый стиль для джекпота
+                    if (winningSector.color === 'gold') {
+                        resultEl.style.color = 'gold';
+                        resultEl.style.textShadow = '0 0 10px gold';
+                    } else {
+                        resultEl.style.color = '';
+                        resultEl.style.textShadow = '';
+                    }
+                }, 5000);
+            });
+        });
     </script>
 </body>
 </html>
